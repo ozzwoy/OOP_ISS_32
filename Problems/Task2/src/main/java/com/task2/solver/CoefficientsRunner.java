@@ -2,27 +2,31 @@ package com.task2.solver;
 
 import com.task2.solver.strategies.RunningStrategy;
 import com.task2.utils.Pair;
+
 import java.util.*;
 import java.util.concurrent.Callable;
 
 public class CoefficientsRunner implements Callable<ArrayList<Pair<Double, Double>>> {
+    private LinkedList<List<Double>> matrix;
     private RunningStrategy strategy;
-    private Iterator<ArrayList<Double>> matrixIterator;
     private ArrayList<Pair<Double, Double>> result;
     private int resultSize;
 
-    public CoefficientsRunner(RunningStrategy strategy, Iterator<ArrayList<Double>> matrixIterator, int resultSize) {
+    public CoefficientsRunner(RunningStrategy strategy, LinkedList<List<Double>> matrix, int resultSize) {
         this.strategy = strategy;
-        this.matrixIterator = matrixIterator;
+        this.matrix = matrix;
         this.resultSize = resultSize;
-        this.result = new ArrayList<Pair<Double, Double>>(resultSize);
+        this.result = new ArrayList<>(resultSize);
     }
 
     @Override
     public ArrayList<Pair<Double, Double>> call() throws Exception {
-        result.add(strategy.getCoefficients(matrixIterator.next(), null));
-        for (int i = 1; i < resultSize; i++) {
-            result.add(strategy.getCoefficients(matrixIterator.next(), result.get(i - 1)));
+        Iterator<List<Double>> iterator = strategy.initIterator(matrix);
+        if (iterator.hasNext()) {
+            result.add(strategy.getCoefficients(iterator.next(), null));
+            for (int i = 1; i < resultSize; i++) {
+                result.add(strategy.getCoefficients(iterator.next(), result.get(i - 1)));
+            }
         }
         return result;
     }

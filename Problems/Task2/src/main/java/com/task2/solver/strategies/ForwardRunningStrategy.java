@@ -1,11 +1,19 @@
 package com.task2.solver.strategies;
 
 import com.task2.utils.Pair;
-import java.util.ArrayList;
+
+import java.util.Iterator;
+import java.util.List;
+import java.util.LinkedList;
 
 public class ForwardRunningStrategy implements RunningStrategy {
     @Override
-    public Pair<Double, Double> getCoefficients(ArrayList<Double> matrixRow, Pair<Double, Double> previous)
+    public Iterator<List<Double>> initIterator(LinkedList<List<Double>> matrix) {
+        return matrix.iterator();
+    }
+
+    @Override
+    public Pair<Double, Double> getCoefficients(List<Double> matrixRow, Pair<Double, Double> previous)
             throws IllegalArgumentException {
         if (matrixRow.size() != ELEMENTS_IN_MATRIX_ROW) {
             throw new IllegalArgumentException("there should be only " + ELEMENTS_IN_MATRIX_ROW
