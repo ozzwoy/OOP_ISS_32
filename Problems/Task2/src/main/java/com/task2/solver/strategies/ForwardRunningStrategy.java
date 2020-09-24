@@ -20,11 +20,11 @@ public class ForwardRunningStrategy implements RunningStrategy {
                                                + " in a matrix row");
         }
         if (previous == null) {
-            return new Pair<Double, Double>(matrixRow.get(1) / matrixRow.get(2), matrixRow.get(3) / matrixRow.get(2));
+            return new Pair<Double, Double>(-matrixRow.get(2) / matrixRow.get(1), matrixRow.get(3) / matrixRow.get(1));
         }
-        Double denominator = matrixRow.get(2) - matrixRow.get(0) * previous.getFirst();
-        return new Pair<Double, Double>(matrixRow.get(1) / denominator,
-                                        (matrixRow.get(3) + matrixRow.get(0) * previous.getSecond())
+        Double denominator = matrixRow.get(1) + matrixRow.get(0) * previous.getFirst();
+        return new Pair<Double, Double>(-matrixRow.get(2) / denominator,
+                                        (matrixRow.get(3) - matrixRow.get(0) * previous.getSecond())
                                         / denominator);
     }
 }

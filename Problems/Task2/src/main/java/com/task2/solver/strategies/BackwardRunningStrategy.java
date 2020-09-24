@@ -19,11 +19,11 @@ public class BackwardRunningStrategy implements RunningStrategy {
         }
 
         if (previous == null) {
-            return new Pair<Double, Double>(matrixRow.get(0) / matrixRow.get(2), matrixRow.get(3) / matrixRow.get(2));
+            return new Pair<Double, Double>(-matrixRow.get(0) / matrixRow.get(1), matrixRow.get(3) / matrixRow.get(1));
         }
-        Double denominator = matrixRow.get(2) - matrixRow.get(1) * previous.getFirst();
-        return new Pair<Double, Double>(matrixRow.get(0) / denominator,
-                                        (matrixRow.get(3) + matrixRow.get(1) * previous.getSecond())
+        Double denominator = matrixRow.get(1) + matrixRow.get(2) * previous.getFirst();
+        return new Pair<Double, Double>(-matrixRow.get(0) / denominator,
+                                        (matrixRow.get(3) - matrixRow.get(2) * previous.getSecond())
                                         / denominator);
     }
 }

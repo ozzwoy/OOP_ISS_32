@@ -5,6 +5,7 @@ import com.task2.solver.strategies.ForwardRunningStrategy;
 import com.task2.utils.Pair;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
@@ -37,12 +38,12 @@ public class TridiagonalMatrixEquationsSystemSolver {
         }
 
         Double alpha = firstHalfCoefficients.get(firstHalfCoefficients.size() - 1).getFirst();
-        Double beta = secondHalfCoefficients.get(firstHalfCoefficients.size() - 1).getFirst();
+        Double beta = firstHalfCoefficients.get(firstHalfCoefficients.size() - 1).getSecond();
         Double xi = secondHalfCoefficients.get(secondHalfCoefficients.size() - 1).getFirst();
         Double eta = secondHalfCoefficients.get(secondHalfCoefficients.size() - 1).getSecond();
 
-        Double xStartForward = (eta + xi * beta) / (1 - xi * alpha);
-        Double xStartBackward = (beta + alpha * eta) / (1 - xi * alpha);
+        Double xStartForward = (eta + xi * beta) / (1.0 - xi * alpha);
+        Double xStartBackward = (beta + alpha * eta) / (1.0 - xi * alpha);
 
         Future<ArrayList<Double>> firstHalfRootsFuture = executor.submit(new RootsCalculator(firstHalfCoefficients,
                                                                                              xStartBackward));
@@ -60,6 +61,7 @@ public class TridiagonalMatrixEquationsSystemSolver {
             System.out.println(e.getMessage());
         }
 
+        Collections.reverse(firstHalfRoots);
         firstHalfRoots.addAll(secondHalfRoots);
         return firstHalfRoots;
     }
