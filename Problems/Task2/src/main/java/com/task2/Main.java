@@ -1,6 +1,7 @@
 package com.task2;
 
 import com.task2.solver.TridiagonalMatrixEquationsSystemSolver;
+import com.task2.solver.exceptions.WrongMatrixElementsNumberException;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -19,6 +20,10 @@ public class Main {
             }
         };
 
-        System.out.println(TridiagonalMatrixEquationsSystemSolver.solve(matrix));
+        try {
+            System.out.println(TridiagonalMatrixEquationsSystemSolver.solve(matrix));
+        } catch (WrongMatrixElementsNumberException e) {
+            System.out.println(e.getMessage());
+        }
     }
 }
