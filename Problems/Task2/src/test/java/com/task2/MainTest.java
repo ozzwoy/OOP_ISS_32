@@ -1,7 +1,7 @@
 package com.task2;
 
 import com.task2.solver.TridiagonalMatrixEquationsSystemSolver;
-import com.task2.solver.exceptions.WrongMatrixElementsNumberException;
+import com.task2.solver.exceptions.WrongMatrixSizeException;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -13,7 +13,45 @@ public class MainTest {
     public MainTest() { }
 
     @Test
-    public void checkOnSmallMatrix() throws WrongMatrixElementsNumberException {
+    public void wrongRowsNumberTest() {
+        List<List<Double>> matrix = new ArrayList<>() {
+            {
+                add(Arrays.asList(null, 2.0, -1.0, -25.0));
+                add(Arrays.asList(-5.0, 10.0, null, 20.0));
+            }
+        };
+
+        try {
+            TridiagonalMatrixEquationsSystemSolver.solve(matrix);
+            Assert.fail("Test for matrix with " + matrix.size() + " rows should have thrown WrongMatrixSizeException.");
+        } catch(WrongMatrixSizeException e) {
+            Assert.assertEquals("Wrong number of matrix rows, should be at least 3 rows.\n" +
+                                "Current number of rows: " + matrix.size() + ".", e.getMessage());
+        }
+    }
+
+    @Test
+    public void wrongColumnsNumberTest() {
+        List<List<Double>> matrix = new ArrayList<>() {
+            {
+                add(Arrays.asList(null, 2.0, -1.0, -25.0));
+                add(Arrays.asList(-3.0, 8.0, -1.0, 72.0));
+                add(Arrays.asList(-5.0, 12.0, -69.0));
+                add(Arrays.asList(-5.0, 10.0, null, 20.0));
+            }
+        };
+
+        try {
+            TridiagonalMatrixEquationsSystemSolver.solve(matrix);
+            Assert.fail("Test for matrix with 3 columns should have thrown WrongMatrixSizeException.");
+        } catch (WrongMatrixSizeException e) {
+            Assert.assertEquals("Wrong number of matrix columns, " +
+                                "should be 4 elements in each row.\nRow #2 has 3 elements.", e.getMessage());
+        }
+    }
+
+    @Test
+    public void smallMatrixTest() throws WrongMatrixSizeException {
         List<List<Double>> matrix = new ArrayList<>() {
             {
                 add(Arrays.asList(null, 2.0, -1.0, -25.0));
@@ -27,7 +65,7 @@ public class MainTest {
     }
 
     @Test
-    public void checkOnOrdinaryMatrix() throws WrongMatrixElementsNumberException {
+    public void ordinaryMatrixTest() throws WrongMatrixSizeException {
         List<List<Double>> matrix = new ArrayList<>() {
             {
                 add(Arrays.asList(null, 2.0, -1.0, -25.0));
@@ -43,7 +81,7 @@ public class MainTest {
     }
 
     @Test
-    public void checkOnBigMatrix() throws WrongMatrixElementsNumberException {
+    public void bigMatrixTest() throws WrongMatrixSizeException {
         List<List<Double>> matrix = new ArrayList<>() {
             {
                 add(Arrays.asList(null, 2.0, -1.0, -25.0));

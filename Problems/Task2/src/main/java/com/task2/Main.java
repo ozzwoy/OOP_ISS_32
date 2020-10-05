@@ -1,7 +1,7 @@
 package com.task2;
 
 import com.task2.solver.TridiagonalMatrixEquationsSystemSolver;
-import com.task2.solver.exceptions.WrongMatrixElementsNumberException;
+import com.task2.solver.exceptions.WrongMatrixSizeException;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -22,7 +22,7 @@ public class Main {
 
         try {
             System.out.println(TridiagonalMatrixEquationsSystemSolver.solve(matrix));
-        } catch (WrongMatrixElementsNumberException e) {
+        } catch (WrongMatrixSizeException e) {
             System.out.println(e.getMessage());
         }
     }
