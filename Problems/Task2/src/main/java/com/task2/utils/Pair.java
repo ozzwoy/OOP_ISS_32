@@ -1,32 +1,17 @@
 package com.task2.utils;
 
-public class Pair <K, V> {
-    private K first;
-    private V second;
+public class Pair <A, B> {
+    private A first;
+    private B second;
 
-    public Pair(K first, V second) {
+    public Pair(A first, B second) {
         this.first = first;
         this.second = second;
     }
 
-    public String toString()
-    {
-        return "(" + first + ", " + second + ")";
-    }
+    public A getFirst() { return first; }
 
-    public K getFirst() {
-        return first;
-    }
-
-    public void setFirst(K first) {
-        this.first = first;
-    }
-
-    public V getSecond() {
+    public B getSecond() {
         return second;
-    }
-
-    public void setSecond(V second) {
-        this.second = second;
     }
 }

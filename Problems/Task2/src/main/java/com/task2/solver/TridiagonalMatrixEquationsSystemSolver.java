@@ -30,17 +30,17 @@ public class TridiagonalMatrixEquationsSystemSolver {
         }
     }
 
-    private static Pair<List<Pair<Double, Double>>, List<Pair<Double, Double>>> calcCoefficients(
+    private static Pair<ArrayList<Pair<Double, Double>>, ArrayList<Pair<Double, Double>>> calcCoefficients(
             LinkedList<List<Double>> matrix, ExecutorService executor, int meetPoint)
             throws ExecutionException, InterruptedException {
-        ArrayList<Pair<Double, Double>> firstHalfCoefficients = null;
-        ArrayList<Pair<Double, Double>> secondHalfCoefficients = null;
+        ArrayList<Pair<Double, Double>> firstHalfCoefficients;
+        ArrayList<Pair<Double, Double>> secondHalfCoefficients;
 
-        Future<ArrayList<Pair<Double, Double>>> backwardRunner = executor.submit(
+        Future<ArrayList<Pair<Double, Double>>> backwardRunnerResult = executor.submit(
                 new RecurrentCoefficientsCalculator(new BackwardRunningStrategy(), matrix, meetPoint));
         firstHalfCoefficients = (new RecurrentCoefficientsCalculator(new ForwardRunningStrategy(), matrix,
                 matrix.size() - meetPoint)).call();
-        secondHalfCoefficients = backwardRunner.get();
+        secondHalfCoefficients = backwardRunnerResult.get();
 
         return new Pair<>(firstHalfCoefficients, secondHalfCoefficients);
     }
@@ -62,8 +62,8 @@ public class TridiagonalMatrixEquationsSystemSolver {
                                                List<Pair<Double, Double>> secondHalfCoefficients, Double xStartBackward,
                                                Double xStartForward, ExecutorService executor)
                                               throws ExecutionException, InterruptedException {
-        ArrayList<Double> firstHalfRoots = null;
-        ArrayList<Double> secondHalfRoots = null;
+        ArrayList<Double> firstHalfRoots;
+        ArrayList<Double> secondHalfRoots;
 
         Future<ArrayList<Double>> firstHalfRootsFuture = executor.submit(new RootsCalculator(firstHalfCoefficients,
                                                                                              xStartBackward));
@@ -86,7 +86,7 @@ public class TridiagonalMatrixEquationsSystemSolver {
         ArrayList<Double> result = null;
 
         try {
-            Pair<List<Pair<Double, Double>>, List<Pair<Double, Double>>> recurrentCoefficients =
+            Pair<ArrayList<Pair<Double, Double>>, ArrayList<Pair<Double, Double>>> recurrentCoefficients =
                     calcCoefficients(matrixCopy, executor, meetPoint);
             List<Pair<Double, Double>> firstHalfCoefficients = recurrentCoefficients.getFirst();
             List<Pair<Double, Double>> secondHalfCoefficients = recurrentCoefficients.getSecond();
@@ -96,7 +96,8 @@ public class TridiagonalMatrixEquationsSystemSolver {
             result = calcRoots(firstHalfCoefficients, secondHalfCoefficients, meetPointValues.getFirst(),
                                meetPointValues.getSecond(), executor);
         } catch(ExecutionException | InterruptedException e) {
-            System.out.println(e.getMessage());
+            System.out.println("Some thread was interrupted or has thrown an exception.");
+            e.printStackTrace();
         }
 
         executor.shutdown();
