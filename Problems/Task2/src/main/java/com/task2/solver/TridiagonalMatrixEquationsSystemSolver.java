@@ -96,7 +96,7 @@ public class TridiagonalMatrixEquationsSystemSolver {
             result = calcRoots(firstHalfCoefficients, secondHalfCoefficients, meetPointValues.getFirst(),
                                meetPointValues.getSecond(), executor);
         } catch(ExecutionException | InterruptedException e) {
-            System.out.println("Some thread was interrupted or has thrown an exception.");
+            System.out.println("Some thread has not returned a result.");
             e.printStackTrace();
         }
 
