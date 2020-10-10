@@ -1,10 +1,5 @@
 package com.task3;
 
-import com.task3.utils.Pair;
-
-import java.util.Deque;
-import java.util.LinkedList;
-
 public class ThreadGroupStatusDaemon extends Thread {
     private ThreadGroup threadGroup;
     private long period;
@@ -23,6 +18,12 @@ public class ThreadGroupStatusDaemon extends Thread {
         int currentLevel = 0;
         String gapString = " ".repeat(INDENT);
 
+        if (level == 0) return;
+        else {
+            System.out.print(gapString);
+            currentLevel++;
+        }
+
         while (currentLevel < level) {
             System.out.print("|" + gapString);
             currentLevel++;
@@ -30,38 +31,39 @@ public class ThreadGroupStatusDaemon extends Thread {
         System.out.print("|-");
     }
 
-    private void printThreadGroup(ThreadGroup group, int level) {
+    void printThread(Thread current, int level) {
         printIndents(level);
-        System.out.println("Thread Group: " + group.toString());
+        System.out.println("Thread: " + current.getName() + ", priority: " + current.getPriority() + ", group: " +
+                           current.getThreadGroup().getName() + ", state: " + current.getState());
+    }
 
-        Thread[] threadList = new Thread[group.activeCount()];
-        group.enumerate(threadList, false);
+    void printThreadGroup(ThreadGroup current, int level) {
+        printIndents(level);
+        System.out.println("Thread Group: " + current.getName() + ", max priority: " + current.getMaxPriority() +
+                           ", parent: " + current.getParent().getName());
+    }
 
-        for (Thread current : threadList) {
-            if (current == null) break;
-            printIndents(level);
-            System.out.println("Thread: " + current.toString());
+    void printThreadGroupContents(ThreadGroup current, int level) {
+        Thread[] threadList = new Thread[current.activeCount()];
+        current.enumerate(threadList, false);
+
+        for (Thread thread : threadList) {
+            if (thread == null) break;
+            printThread(thread, level);
+        }
+
+        ThreadGroup[] groupList = new ThreadGroup[current.activeGroupCount()];
+        current.enumerate(groupList, false);
+        for (ThreadGroup group : groupList) {
+            if (group == null) break;
+            printThreadGroup(group, level);
+            printThreadGroupContents(group, level + 1);
         }
     }
 
     private void printStatus() {
-        int level = 0;
-        Deque<Pair<ThreadGroup, Integer>> stack = new LinkedList<>();
-        Pair<ThreadGroup, Integer> item;
-
-        stack.push(new Pair<>(threadGroup, level));
-
-        while (!stack.isEmpty()) {
-            item = stack.peek();
-            stack.pop();
-            printThreadGroup(item.getFirst(), item.getSecond());
-
-            ThreadGroup[] groupList = new ThreadGroup[item.getFirst().activeGroupCount()];
-            item.getFirst().enumerate(groupList, false);
-            for (ThreadGroup current : groupList) {
-                stack.push(new Pair<>(current, item.getSecond() + 1));
-            }
-        }
+        printThreadGroup(threadGroup, 0);
+        printThreadGroupContents(threadGroup, 1);
     }
 
     @Override
