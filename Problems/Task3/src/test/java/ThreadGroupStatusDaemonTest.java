@@ -1,19 +1,27 @@
 import com.task3.ThreadGroupStatusDaemonLauncher;
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 
 public class ThreadGroupStatusDaemonTest {
-    private final ByteArrayOutputStream outData = new ByteArrayOutputStream();
-    private final PrintStream consoleOut = System.out;
+    private static final ByteArrayOutputStream outData = new ByteArrayOutputStream();
+    private static final PrintStream consoleOut = System.out;
 
-    @Before
-    public void redirectStream() {
+    @BeforeAll
+    public static void redirectStream() {
         System.setOut(new PrintStream(outData));
+    }
+
+    @Test
+    public void testWrongPeriodConstructor() {
+        ThreadGroup threadGroup = new ThreadGroup("TG");
+        Assertions.assertThrows(IllegalArgumentException.class,
+                () -> ThreadGroupStatusDaemonLauncher.launch(threadGroup, -1),
+                "A period should be a positive long integer. Current value: -1");
     }
 
     @Test
@@ -77,8 +85,8 @@ public class ThreadGroupStatusDaemonTest {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        Thread daemon = ThreadGroupStatusDaemonLauncher.launch(masterGroup, 1000);
 
+        Thread daemon = ThreadGroupStatusDaemonLauncher.launch(masterGroup, 1000);
         try {
             Thread.sleep(3500);
         } catch (InterruptedException e) {
@@ -86,7 +94,7 @@ public class ThreadGroupStatusDaemonTest {
         }
         daemon.interrupt();
 
-        Assert.assertEquals("THREAD GROUP HIERARCHY:\n" +
+        Assertions.assertEquals("THREAD GROUP HIERARCHY:\n" +
                 "Thread Group: Master Group, max priority: 10, parent: main\n" +
                 "          |-Thread: First, priority: 5, group: Master Group, state: TIMED_WAITING\n" +
                 "          |-Thread Group: Slave Group 1, max priority: 10, parent: Master Group\n" +
@@ -114,8 +122,6 @@ public class ThreadGroupStatusDaemonTest {
                 outData.toString().trim().replace("\r", ""));
     }
 
-    @After
-    public void restoreStream() {
-        System.setOut(consoleOut);
-    }
+    @AfterAll
+    public static void restoreStream() { System.setOut(consoleOut); }
 }

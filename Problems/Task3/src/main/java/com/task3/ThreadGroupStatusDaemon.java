@@ -7,7 +7,8 @@ public class ThreadGroupStatusDaemon extends Thread {
 
     ThreadGroupStatusDaemon(ThreadGroup threadGroup, long periodInMillis) {
         if (periodInMillis < 1) {
-            throw new IllegalArgumentException("A period should be greater than 0.");
+            throw new IllegalArgumentException("A period should be a positive long integer. Current value: " +
+                    periodInMillis);
         }
         this.period = periodInMillis;
         this.threadGroup = threadGroup;
