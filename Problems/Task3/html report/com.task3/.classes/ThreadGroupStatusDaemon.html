@@ -1,0 +1,167 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: ThreadGroupStatusDaemon</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">com.task3</a> ]
+</div>
+
+<h1>Coverage Summary for Class: ThreadGroupStatusDaemon (com.task3)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">ThreadGroupStatusDaemon</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (7/ 7)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (46/ 46)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package com.task3;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;public class ThreadGroupStatusDaemon implements Runnable {
+<i>4</i>&nbsp;    private ThreadGroup threadGroup;
+<i>5</i>&nbsp;    private long period;
+<i>6</i>&nbsp;    private static final int INDENT = 10;
+<i>7</i>&nbsp;
+<b class="fc"><i>8</i>&nbsp;    ThreadGroupStatusDaemon(ThreadGroup threadGroup, long periodInMillis) {</b>
+<b class="fc"><i>9</i>&nbsp;        if (periodInMillis &lt; 1) {</b>
+<b class="fc"><i>10</i>&nbsp;            throw new IllegalArgumentException(&quot;A period should be a positive long integer. Current value: &quot; +</b>
+<i>11</i>&nbsp;                    periodInMillis);
+<i>12</i>&nbsp;        }
+<b class="fc"><i>13</i>&nbsp;        this.period = periodInMillis;</b>
+<b class="fc"><i>14</i>&nbsp;        this.threadGroup = threadGroup;</b>
+<b class="fc"><i>15</i>&nbsp;    }</b>
+<i>16</i>&nbsp;
+<i>17</i>&nbsp;    private void printIndents(int level) {
+<b class="fc"><i>18</i>&nbsp;        int currentLevel = 0;</b>
+<b class="fc"><i>19</i>&nbsp;        String gapString = &quot; &quot;.repeat(INDENT);</b>
+<i>20</i>&nbsp;
+<b class="fc"><i>21</i>&nbsp;        if (level == 0) return;</b>
+<i>22</i>&nbsp;        else {
+<b class="fc"><i>23</i>&nbsp;            System.out.print(gapString);</b>
+<b class="fc"><i>24</i>&nbsp;            currentLevel++;</b>
+<i>25</i>&nbsp;        }
+<i>26</i>&nbsp;
+<b class="fc"><i>27</i>&nbsp;        while (currentLevel &lt; level) {</b>
+<b class="fc"><i>28</i>&nbsp;            System.out.print(&quot;|&quot; + gapString);</b>
+<b class="fc"><i>29</i>&nbsp;            currentLevel++;</b>
+<i>30</i>&nbsp;        }
+<b class="fc"><i>31</i>&nbsp;        System.out.print(&quot;|-&quot;);</b>
+<b class="fc"><i>32</i>&nbsp;    }</b>
+<i>33</i>&nbsp;
+<i>34</i>&nbsp;    void printThread(Thread current, int level) {
+<b class="fc"><i>35</i>&nbsp;        printIndents(level);</b>
+<b class="fc"><i>36</i>&nbsp;        System.out.println(&quot;Thread: &quot; + current.getName() + &quot;, priority: &quot; + current.getPriority() + &quot;, group: &quot; +</b>
+<b class="fc"><i>37</i>&nbsp;                           current.getThreadGroup().getName() + &quot;, state: &quot; + current.getState());</b>
+<b class="fc"><i>38</i>&nbsp;    }</b>
+<i>39</i>&nbsp;
+<i>40</i>&nbsp;    void printThreadGroup(ThreadGroup current, int level) {
+<b class="fc"><i>41</i>&nbsp;        printIndents(level);</b>
+<b class="fc"><i>42</i>&nbsp;        System.out.println(&quot;Thread Group: &quot; + current.getName() + &quot;, max priority: &quot; + current.getMaxPriority() +</b>
+<b class="fc"><i>43</i>&nbsp;                           &quot;, parent: &quot; + current.getParent().getName());</b>
+<b class="fc"><i>44</i>&nbsp;    }</b>
+<i>45</i>&nbsp;
+<i>46</i>&nbsp;    void printThreadGroupContents(ThreadGroup current, int level) {
+<b class="fc"><i>47</i>&nbsp;        Thread[] threadList = new Thread[current.activeCount()];</b>
+<b class="fc"><i>48</i>&nbsp;        current.enumerate(threadList, false);</b>
+<i>49</i>&nbsp;
+<b class="fc"><i>50</i>&nbsp;        for (Thread thread : threadList) {</b>
+<b class="fc"><i>51</i>&nbsp;            if (thread == null) break;</b>
+<b class="fc"><i>52</i>&nbsp;            printThread(thread, level);</b>
+<i>53</i>&nbsp;        }
+<i>54</i>&nbsp;
+<b class="fc"><i>55</i>&nbsp;        ThreadGroup[] groupList = new ThreadGroup[current.activeGroupCount()];</b>
+<b class="fc"><i>56</i>&nbsp;        current.enumerate(groupList, false);</b>
+<b class="fc"><i>57</i>&nbsp;        for (ThreadGroup group : groupList) {</b>
+<b class="fc"><i>58</i>&nbsp;            if (group == null) break;</b>
+<b class="fc"><i>59</i>&nbsp;            printThreadGroup(group, level);</b>
+<b class="fc"><i>60</i>&nbsp;            printThreadGroupContents(group, level + 1);</b>
+<i>61</i>&nbsp;        }
+<b class="fc"><i>62</i>&nbsp;    }</b>
+<i>63</i>&nbsp;
+<i>64</i>&nbsp;    private void printStatus() {
+<b class="fc"><i>65</i>&nbsp;        printThreadGroup(threadGroup, 0);</b>
+<b class="fc"><i>66</i>&nbsp;        printThreadGroupContents(threadGroup, 1);</b>
+<b class="fc"><i>67</i>&nbsp;    }</b>
+<i>68</i>&nbsp;
+<i>69</i>&nbsp;    @Override
+<i>70</i>&nbsp;    public void run() {
+<b class="fc"><i>71</i>&nbsp;        long previousTimePoint = System.currentTimeMillis();</b>
+<i>72</i>&nbsp;        long currentTimePoint;
+<i>73</i>&nbsp;
+<i>74</i>&nbsp;        while (true) {
+<b class="fc"><i>75</i>&nbsp;            currentTimePoint = System.currentTimeMillis();</b>
+<b class="fc"><i>76</i>&nbsp;            if (currentTimePoint - previousTimePoint &gt;= period) {</b>
+<b class="fc"><i>77</i>&nbsp;                System.out.print(&quot;THREAD GROUP HIERARCHY:\n&quot;);</b>
+<b class="fc"><i>78</i>&nbsp;                printStatus();</b>
+<b class="fc"><i>79</i>&nbsp;                System.out.print(&quot;\n\n&quot;);</b>
+<b class="fc"><i>80</i>&nbsp;                previousTimePoint = currentTimePoint;</b>
+<i>81</i>&nbsp;            }
+<i>82</i>&nbsp;        }
+<i>83</i>&nbsp;    }
+<i>84</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-10-12 13:44</div>
+</div>
+</body>
+</html>

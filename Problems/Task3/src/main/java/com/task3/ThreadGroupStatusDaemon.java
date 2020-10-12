@@ -1,6 +1,6 @@
 package com.task3;
 
-public class ThreadGroupStatusDaemon extends Thread {
+public class ThreadGroupStatusDaemon implements Runnable {
     private ThreadGroup threadGroup;
     private long period;
     private static final int INDENT = 10;
@@ -12,7 +12,6 @@ public class ThreadGroupStatusDaemon extends Thread {
         }
         this.period = periodInMillis;
         this.threadGroup = threadGroup;
-        this.setDaemon(true);
     }
 
     private void printIndents(int level) {
