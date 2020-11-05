@@ -7,6 +7,12 @@ import java.io.InputStream;
 
 public class CustomClassLoader extends ClassLoader {
 
+    @Override
+    public Class findClass(String name) throws ClassNotFoundException {
+        byte[] b = loadClassFromFile(name);
+        return defineClass(name, b, 0, b.length);
+    }
+
     private byte[] loadClassFromFile(String fileName) throws ClassNotFoundException {
         InputStream inputStream = getClass().getClassLoader().getResourceAsStream(
                 fileName.replace('.', File.separatorChar) + ".class");
@@ -32,11 +38,5 @@ public class CustomClassLoader extends ClassLoader {
 
         buffer = byteStream.toByteArray();
         return buffer;
-    }
-
-    @Override
-    public Class loadClass(String name) throws ClassNotFoundException {
-        byte[] b = loadClassFromFile(name);
-        return defineClass(name, b, 0, b.length);
     }
 }
