@@ -24,8 +24,16 @@ public class ClassInfoPrinter {
         System.out.println("}");
     }
 
+    private String getEntityKeyword(Class<?> entity) {
+        return entity.isEnum() ? "enum" : (entity.isInterface() ? "interface" : "class");
+    }
+
     private void printGeneralInfo() {
-        System.out.print(aClass.toString());
+        System.out.print(Modifier.toString(aClass.getModifiers()));
+        if (getEntityKeyword(aClass).equals("class")) {
+            System.out.print(" class");
+        }
+        System.out.print(" " + aClass.getName());
 
         Class<?> superclass = aClass.getSuperclass();
         if (superclass != null) {
@@ -45,8 +53,7 @@ public class ClassInfoPrinter {
         Class<?>[] subclasses = aClass.getDeclaredClasses();
         for (Class<?> subclass : subclasses) {
             System.out.print("\t" + Modifier.toString(subclass.getModifiers()) + " ");
-            String entity = subclass.isEnum() ? "enum" : (subclass.isInterface() ? "interface" : "class");
-            System.out.println(entity + " " + subclass.getSimpleName());
+            System.out.println(getEntityKeyword(subclass) + " " + subclass.getSimpleName());
         }
     }
 

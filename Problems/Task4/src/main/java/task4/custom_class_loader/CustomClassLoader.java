@@ -1,19 +1,29 @@
 package task4.custom_class_loader;
 
+import org.apache.log4j.LogManager;
+import org.apache.log4j.PropertyConfigurator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 
 public class CustomClassLoader extends ClassLoader {
+    static {
+        new PropertyConfigurator().doConfigure("log4j.properties", LogManager.getLoggerRepository());
+    }
+    private static final Logger LOGGER = LoggerFactory.getLogger(CustomClassLoader.class);
 
     @Override
-    public Class findClass(String name) throws ClassNotFoundException {
+    public Class<?> findClass(String name) throws ClassNotFoundException {
         byte[] b = loadClassFromFile(name);
         return defineClass(name, b, 0, b.length);
     }
 
     private byte[] loadClassFromFile(String fileName) throws ClassNotFoundException {
+        //LOGGER.info("ClassLoader runs.");
         InputStream inputStream = getClass().getClassLoader().getResourceAsStream(
                 fileName.replace('.', File.separatorChar) + ".class");
         if (inputStream == null) {
@@ -33,7 +43,7 @@ public class CustomClassLoader extends ClassLoader {
                 }
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            LOGGER.error("Error while reading class from stream.", e);
         }
 
         buffer = byteStream.toByteArray();

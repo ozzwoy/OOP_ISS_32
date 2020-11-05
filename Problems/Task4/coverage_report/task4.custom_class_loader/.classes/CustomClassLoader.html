@@ -1,0 +1,135 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: CustomClassLoader</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">task4.custom_class_loader</a> ]
+</div>
+
+<h1>Coverage Summary for Class: CustomClassLoader (task4.custom_class_loader)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">CustomClassLoader</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (4/ 4)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    88,9%
+  </span>
+  <span class="absValue">
+    (16/ 18)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package task4.custom_class_loader;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import org.apache.log4j.LogManager;
+<i>4</i>&nbsp;import org.apache.log4j.PropertyConfigurator;
+<i>5</i>&nbsp;import org.slf4j.Logger;
+<i>6</i>&nbsp;import org.slf4j.LoggerFactory;
+<i>7</i>&nbsp;
+<i>8</i>&nbsp;import java.io.ByteArrayOutputStream;
+<i>9</i>&nbsp;import java.io.File;
+<i>10</i>&nbsp;import java.io.IOException;
+<i>11</i>&nbsp;import java.io.InputStream;
+<i>12</i>&nbsp;
+<b class="fc"><i>13</i>&nbsp;public class CustomClassLoader extends ClassLoader {</b>
+<i>14</i>&nbsp;    static {
+<b class="fc"><i>15</i>&nbsp;        new PropertyConfigurator().doConfigure(&quot;log4j.properties&quot;, LogManager.getLoggerRepository());</b>
+<i>16</i>&nbsp;    }
+<b class="fc"><i>17</i>&nbsp;    private static final Logger LOGGER = LoggerFactory.getLogger(CustomClassLoader.class);</b>
+<i>18</i>&nbsp;
+<i>19</i>&nbsp;    @Override
+<i>20</i>&nbsp;    public Class&lt;?&gt; findClass(String name) throws ClassNotFoundException {
+<b class="fc"><i>21</i>&nbsp;        byte[] b = loadClassFromFile(name);</b>
+<b class="fc"><i>22</i>&nbsp;        return defineClass(name, b, 0, b.length);</b>
+<i>23</i>&nbsp;    }
+<i>24</i>&nbsp;
+<i>25</i>&nbsp;    private byte[] loadClassFromFile(String fileName) throws ClassNotFoundException {
+<i>26</i>&nbsp;        //LOGGER.info(&quot;ClassLoader runs.&quot;);
+<b class="fc"><i>27</i>&nbsp;        InputStream inputStream = getClass().getClassLoader().getResourceAsStream(</b>
+<b class="fc"><i>28</i>&nbsp;                fileName.replace(&#39;.&#39;, File.separatorChar) + &quot;.class&quot;);</b>
+<b class="fc"><i>29</i>&nbsp;        if (inputStream == null) {</b>
+<b class="fc"><i>30</i>&nbsp;            throw new ClassNotFoundException(&quot;The class is not found.&quot;);</b>
+<i>31</i>&nbsp;        }
+<i>32</i>&nbsp;        byte[] buffer;
+<b class="fc"><i>33</i>&nbsp;        ByteArrayOutputStream byteStream = new ByteArrayOutputStream();</b>
+<i>34</i>&nbsp;        int nextValue;
+<i>35</i>&nbsp;
+<i>36</i>&nbsp;        try {
+<i>37</i>&nbsp;            while (true) {
+<b class="fc"><i>38</i>&nbsp;                nextValue = inputStream.read();</b>
+<b class="fc"><i>39</i>&nbsp;                if (nextValue != -1) {</b>
+<b class="fc"><i>40</i>&nbsp;                    byteStream.write(nextValue);</b>
+<i>41</i>&nbsp;                } else {
+<i>42</i>&nbsp;                    break;
+<i>43</i>&nbsp;                }
+<i>44</i>&nbsp;            }
+<b class="nc"><i>45</i>&nbsp;        } catch (IOException e) {</b>
+<b class="nc"><i>46</i>&nbsp;            LOGGER.error(&quot;Error while reading class from stream.&quot;, e);</b>
+<b class="fc"><i>47</i>&nbsp;        }</b>
+<i>48</i>&nbsp;
+<b class="fc"><i>49</i>&nbsp;        buffer = byteStream.toByteArray();</b>
+<b class="fc"><i>50</i>&nbsp;        return buffer;</b>
+<i>51</i>&nbsp;    }
+<i>52</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-11-05 14:50</div>
+</div>
+</body>
+</html>
