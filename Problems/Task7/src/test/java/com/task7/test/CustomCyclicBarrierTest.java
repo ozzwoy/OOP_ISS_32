@@ -84,16 +84,18 @@ public class CustomCyclicBarrierTest {
                 e.printStackTrace();
             }
         });
-        ExecutorService executorService = Executors.newFixedThreadPool(3);
+        ExecutorService executorService1 = Executors.newSingleThreadExecutor();
+        ExecutorService executorService2 = Executors.newSingleThreadExecutor();
 
-        executorService.submit(new SampleCallable(barrier, 10L));
-        executorService.submit(new SampleCallable(barrier, 10L));
+        Future<Long> firstTimeFuture = executorService1.submit(new SampleCallable(barrier, 10L));
+        executorService2.submit(new SampleCallable(barrier, 10L));
 
         Thread.sleep(50L);
         Assertions.assertEquals(2, barrier.getNumberWaiting());
 
-        executorService.shutdownNow();
+        executorService2.shutdownNow();
         Thread.sleep(100L);
+        Assertions.assertThrows(ExecutionException.class, firstTimeFuture::get, "The barrier was broken.");
         Assertions.assertTrue(barrier.isBroken() && barrier.isReleased() && barrier.getNumberWaiting() == 0);
     }
 }
