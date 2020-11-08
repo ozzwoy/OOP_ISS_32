@@ -7,13 +7,13 @@ public class NonblockingMSQueue<T> {
     private AtomicStampedReference<Node<T>> tail;
 
     public NonblockingMSQueue() {
-        Node<T> dummyNode = new Node<>(null, null);
+        Node<T> dummyNode = new Node<>(null, new AtomicStampedReference<>(null, 0));
         this.head = new AtomicStampedReference<>(dummyNode, 0);
         this.tail = new AtomicStampedReference<>(dummyNode, 0);
     }
 
     public void enqueue(T t) {
-        Node<T> newNode = new Node<>(t, null);
+        Node<T> newNode = new Node<>(t, new AtomicStampedReference<>(null, 0));
         AtomicStampedReference<Node<T>> prevTail;
         AtomicStampedReference<Node<T>> prevNext;
 
@@ -21,7 +21,7 @@ public class NonblockingMSQueue<T> {
             prevTail = tail;
             prevNext = tail.getReference().getNext();
 
-            if (prevTail == tail) {
+            if (tail.equals(prevTail)) {
                 if (prevNext.getReference() == null) {
                     if (tail.getReference().getNext().compareAndSet(prevNext.getReference(),
                                                                     newNode,
@@ -50,15 +50,15 @@ public class NonblockingMSQueue<T> {
             prevTail = tail;
             prevNext = head.getReference().getNext();
 
-            if (prevHead == head) {
+            if (head.equals(prevHead)) {
                 if (prevHead.getReference() == prevTail.getReference()) {
                     if (prevNext.getReference() == null) {
                         return null;
                     }
-                    prevTail.compareAndSet(prevTail.getReference(), prevNext.getReference(), prevTail.getStamp(),
-                                           prevTail.getStamp() + 1);
+                    tail.compareAndSet(prevTail.getReference(), prevNext.getReference(), prevTail.getStamp(),
+                                       prevTail.getStamp() + 1);
                 } else {
-                    dequeuedValue = prevHead.getReference().getValue();
+                    dequeuedValue = prevNext.getReference().getValue();
                     if (head.compareAndSet(prevHead.getReference(), prevNext.getReference(), prevHead.getStamp(),
                                            prevHead.getStamp() + 1)) {
                         break;
