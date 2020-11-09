@@ -1,4 +1,4 @@
-package task4.sample_classes;
+package task4.test.sample_classes;
 
 public interface Duck {
 

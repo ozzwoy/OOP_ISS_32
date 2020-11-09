@@ -1,6 +1,6 @@
-package task4.class_info_printer;
+package task4.main.class_info_printer;
 
-import task4.custom_class_loader.CustomClassLoader;
+import task4.main.custom_class_loader.CustomClassLoader;
 
 import java.lang.reflect.*;
 

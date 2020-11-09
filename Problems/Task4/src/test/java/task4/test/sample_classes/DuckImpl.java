@@ -1,7 +1,7 @@
-package task4.sample_classes;
+package task4.test.sample_classes;
 
 public class DuckImpl implements Duck {
-    public enum Species { GOLDEN, SILVER, BRONZE; }
+    public enum Species { GOLDEN, SILVER, BRONZE }
     public static final int NUM_OF_FEET = 3;
     private final String name;
     private final boolean friendly;

@@ -1,6 +1,8 @@
+package task4.test;
+
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import task4.custom_class_loader.CustomClassLoader;
+import task4.main.custom_class_loader.CustomClassLoader;
 
 public class CustomClassLoaderTest {
     private static final CustomClassLoader loader = new CustomClassLoader();

@@ -1,4 +1,4 @@
-package task4.custom_class_loader;
+package task4.main.custom_class_loader;
 
 import org.apache.log4j.LogManager;
 import org.apache.log4j.PropertyConfigurator;
