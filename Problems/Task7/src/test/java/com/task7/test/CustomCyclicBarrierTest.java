@@ -33,9 +33,9 @@ public class CustomCyclicBarrierTest {
         for (int i = 0; i < times; i++) {
             Assertions.assertTrue(barrier.getParties() == 3 && barrier.getNumberWaiting() == 0);
 
-            Future<Long> firstTimeFuture = executorService.submit(new SampleCallable(barrier, longestTimeSleeping));
-            Future<Long> secondTimeFuture = executorService.submit(new SampleCallable(barrier, 50L));
-            Future<Long> thirdTimeFuture = executorService.submit(new SampleCallable(barrier, 10L));
+            Future<Long> firstTimeFuture = executorService.submit(new BenchmarkCallable(barrier, longestTimeSleeping));
+            Future<Long> secondTimeFuture = executorService.submit(new BenchmarkCallable(barrier, 50L));
+            Future<Long> thirdTimeFuture = executorService.submit(new BenchmarkCallable(barrier, 10L));
 
             Thread.sleep(1000);
             Assertions.assertEquals(2, barrier.getNumberWaiting());
@@ -63,8 +63,8 @@ public class CustomCyclicBarrierTest {
         });
         ExecutorService executorService = Executors.newFixedThreadPool(3);
 
-        Future<Long> firstTimeFuture = executorService.submit(new SampleCallable(barrier, 10L));
-        Future<Long> secondTimeFuture = executorService.submit(new SampleCallable(barrier, 10L));
+        Future<Long> firstTimeFuture = executorService.submit(new BenchmarkCallable(barrier, 10L));
+        Future<Long> secondTimeFuture = executorService.submit(new BenchmarkCallable(barrier, 10L));
 
         Thread.sleep(50L);
         Assertions.assertEquals(2, barrier.getNumberWaiting());
@@ -87,8 +87,8 @@ public class CustomCyclicBarrierTest {
         ExecutorService executorService1 = Executors.newSingleThreadExecutor();
         ExecutorService executorService2 = Executors.newSingleThreadExecutor();
 
-        Future<Long> firstTimeFuture = executorService1.submit(new SampleCallable(barrier, 10L));
-        executorService2.submit(new SampleCallable(barrier, 10L));
+        Future<Long> firstTimeFuture = executorService1.submit(new BenchmarkCallable(barrier, 10L));
+        executorService2.submit(new BenchmarkCallable(barrier, 10L));
 
         Thread.sleep(50L);
         Assertions.assertEquals(2, barrier.getNumberWaiting());
