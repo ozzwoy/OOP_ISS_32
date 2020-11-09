@@ -3,8 +3,8 @@ package com.task6.main;
 import java.util.concurrent.atomic.AtomicStampedReference;
 
 public class NonblockingMSQueue<T> {
-    private AtomicStampedReference<Node<T>> head;
-    private AtomicStampedReference<Node<T>> tail;
+    private final AtomicStampedReference<Node<T>> head;
+    private final AtomicStampedReference<Node<T>> tail;
 
     public NonblockingMSQueue() {
         Node<T> dummyNode = new Node<>(null, new AtomicStampedReference<>(null, 0));
@@ -14,19 +14,19 @@ public class NonblockingMSQueue<T> {
 
     public void enqueue(T t) {
         Node<T> newNode = new Node<>(t, new AtomicStampedReference<>(null, 0));
-        AtomicStampedReference<Node<T>> prevTail;
-        AtomicStampedReference<Node<T>> prevNext;
+        AtomicStampedReference<Node<T>> prevTail = new AtomicStampedReference<>(null, 0);
+        AtomicStampedReference<Node<T>> prevNext = new AtomicStampedReference<>(null, 0);
 
         while (true) {
-            prevTail = tail;
-            prevNext = tail.getReference().getNext();
+            prevTail.set(tail.getReference(), tail.getStamp());
+            prevNext.set(tail.getReference().getNext().getReference(), tail.getReference().getNext().getStamp());
 
-            if (tail.equals(prevTail)) {
+            if (prevTail.getReference() == tail.getReference() && prevTail.getStamp() == tail.getStamp()) {
                 if (prevNext.getReference() == null) {
-                    if (tail.getReference().getNext().compareAndSet(prevNext.getReference(),
-                                                                    newNode,
-                                                                    prevNext.getStamp(),
-                                                                    prevNext.getStamp() + 1)) {
+                    if (prevTail.getReference().getNext().compareAndSet(prevNext.getReference(),
+                                                                        newNode,
+                                                                        prevNext.getStamp(),
+                                                                        prevNext.getStamp() + 1)) {
                         break;
                     }
                 } else {
@@ -40,17 +40,17 @@ public class NonblockingMSQueue<T> {
     }
 
     public T dequeue() {
-        AtomicStampedReference<Node<T>> prevHead;
-        AtomicStampedReference<Node<T>> prevTail;
-        AtomicStampedReference<Node<T>> prevNext;
+        AtomicStampedReference<Node<T>> prevHead = new AtomicStampedReference<>(null, 0);
+        AtomicStampedReference<Node<T>> prevTail = new AtomicStampedReference<>(null, 0);
+        AtomicStampedReference<Node<T>> prevNext = new AtomicStampedReference<>(null, 0);
         T dequeuedValue;
 
         while (true) {
-            prevHead = head;
-            prevTail = tail;
-            prevNext = head.getReference().getNext();
+            prevHead.set(head.getReference(), head.getStamp());
+            prevTail.set(tail.getReference(), tail.getStamp());
+            prevNext.set(head.getReference().getNext().getReference(), head.getReference().getNext().getStamp());
 
-            if (head.equals(prevHead)) {
+            if (prevHead.getReference() == head.getReference() && prevHead.getStamp() == head.getStamp()) {
                 if (prevHead.getReference() == prevTail.getReference()) {
                     if (prevNext.getReference() == null) {
                         return null;

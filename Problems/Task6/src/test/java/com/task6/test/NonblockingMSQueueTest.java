@@ -38,7 +38,7 @@ public class NonblockingMSQueueTest {
         NonblockingMSQueue<Integer> queue = new NonblockingMSQueue<>();
 
         final int chunkSize = 1000;
-        final int numOfThreads = 2;
+        final int numOfThreads = 5;
 
         List<QueueTestCallable> callables = new ArrayList<>(numOfThreads);
         List<Future<List<Integer>>> futures = new ArrayList<>(numOfThreads);
@@ -56,6 +56,7 @@ public class NonblockingMSQueueTest {
         for (Future<List<Integer>> future : futures) {
             try {
                 result.addAll(future.get());
+                result.sort(Integer::compareTo);
             } catch (ExecutionException | InterruptedException e) {
                 e.printStackTrace();
             }
