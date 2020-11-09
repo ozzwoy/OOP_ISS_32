@@ -34,10 +34,10 @@ public class NonblockingMSQueueTest {
     }
 
     @Test
-    public void testOnIntegerArrays() {
+    public void testOnIntegerArrays() throws ExecutionException, InterruptedException {
         NonblockingMSQueue<Integer> queue = new NonblockingMSQueue<>();
 
-        final int chunkSize = 1000;
+        final int chunkSize = 10000;
         final int numOfThreads = 5;
 
         List<QueueTestCallable> callables = new ArrayList<>(numOfThreads);
@@ -46,20 +46,18 @@ public class NonblockingMSQueueTest {
 
         for (int i = 0; i < numOfThreads; i++) {
             callables.add(new QueueTestCallable(queue, IntStream.range(i * chunkSize, (i + 1) * chunkSize).toArray()));
+            Thread.sleep(1);
         }
 
         ExecutorService executorService = Executors.newFixedThreadPool(numOfThreads);
         for (int i = 0; i < numOfThreads; i++) {
             futures.add(executorService.submit(callables.get(i)));
         }
+        executorService.shutdown();
 
         for (Future<List<Integer>> future : futures) {
-            try {
-                result.addAll(future.get());
-                result.sort(Integer::compareTo);
-            } catch (ExecutionException | InterruptedException e) {
-                e.printStackTrace();
-            }
+            result.addAll(future.get());
+            result.sort(Integer::compareTo);
         }
 
         List<Integer> expected = new ArrayList<>(chunkSize * numOfThreads);
@@ -68,5 +66,33 @@ public class NonblockingMSQueueTest {
         }
 
         Assertions.assertEquals(expected, result);
+        Assertions.assertNull(queue.dequeue());
+    }
+
+    @Test
+    public void testOnIntegerArraysWithInterruption() throws InterruptedException {
+        NonblockingMSQueue<Integer> queue = new NonblockingMSQueue<>();
+
+        final int chunkSize = 10000;
+        final int numOfThreads = 3;
+
+        List<QueueTestCallable> callables = new ArrayList<>(numOfThreads);
+
+        for (int i = 0; i < numOfThreads; i++) {
+            callables.add(new QueueTestCallable(queue, IntStream.range(i * chunkSize, (i + 1) * chunkSize).toArray()));
+        }
+
+        ExecutorService executorService = Executors.newFixedThreadPool(numOfThreads);
+        ExecutorService subExecutorService = Executors.newSingleThreadExecutor();
+
+        Future<List<Integer>> future = subExecutorService.submit(callables.get(numOfThreads - 1));
+
+        executorService.shutdown();
+
+        Thread.sleep(3);
+        Assertions.assertFalse(future.isDone());
+        future.cancel(true);
+        Thread.sleep(50);
+        Assertions.assertThrows(CancellationException.class, future::get);
     }
 }
