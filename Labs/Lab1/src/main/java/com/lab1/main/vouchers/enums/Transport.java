@@ -1,0 +1,28 @@
+package com.lab1.main.vouchers.enums;
+
+public enum Transport {
+    BUS {
+        @Override
+        public String toString() {
+            return "bus";
+        }
+    },
+    PLANE {
+        @Override
+        public String toString() {
+            return "plane";
+        }
+    },
+    SHIP {
+        @Override
+        public String toString() {
+            return "ship";
+        }
+    },
+    TRAIN {
+        @Override
+        public String toString() {
+            return "train";
+        }
+    }
+}
