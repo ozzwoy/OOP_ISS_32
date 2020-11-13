@@ -4,6 +4,7 @@ import com.lab1.main.vouchers.Voucher;
 import com.lab1.main.vouchers.enums.Meals;
 import com.lab1.main.vouchers.enums.Transport;
 
+import java.util.Arrays;
 import java.util.function.Predicate;
 
 public class VoucherPredicateBuilder {
@@ -13,18 +14,34 @@ public class VoucherPredicateBuilder {
         this.predicate = voucher -> true;
     }
 
-    public VoucherPredicateBuilder byDestination(String destination) {
-        predicate = predicate.and(voucher -> voucher.getDestination().equals(destination));
+    public Predicate<Voucher> getPredicate() {
+        return predicate;
+    }
+
+    public VoucherPredicateBuilder byDestination(String... destinations) {
+        Predicate<Voucher> subpredicate = voucher -> false;
+        for (String current : destinations) {
+            subpredicate = subpredicate.or(voucher -> voucher.getDestination().equals(current));
+        }
+        predicate = predicate.and(subpredicate);
         return this;
     }
 
-    public VoucherPredicateBuilder byTransport(Transport transport) {
-        predicate = predicate.and(voucher -> voucher.getTransport().equals(transport));
+    public VoucherPredicateBuilder byTransport(Transport... transports) {
+        Predicate<Voucher> subpredicate = voucher -> false;
+        for (Transport current : transports) {
+            subpredicate = subpredicate.or(voucher -> voucher.getTransport().equals(current));
+        }
+        predicate = predicate.and(subpredicate);
         return this;
     }
 
-    public VoucherPredicateBuilder byMeals(Meals meals) {
-        predicate = predicate.and(voucher -> voucher.getMeals().equals(meals));
+    public VoucherPredicateBuilder byMeals(Meals... meals) {
+        Predicate<Voucher> subpredicate = voucher -> false;
+        for (Meals current : meals) {
+            subpredicate = subpredicate.or(voucher -> voucher.getMeals().equals(current));
+        }
+        predicate = predicate.and(subpredicate);
         return this;
     }
 

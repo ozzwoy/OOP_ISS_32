@@ -5,7 +5,7 @@ import com.lab1.main.vouchers.enums.Transport;
 
 public class ExcursionVoucher extends Voucher {
 
-    ExcursionVoucher(String destination, Transport transport, Meals meals, int numOfDays, double price,
+    public ExcursionVoucher(String destination, Transport transport, Meals meals, int numOfDays, double price,
                      String description) {
         super(destination, transport, meals, numOfDays, price, description);
     }

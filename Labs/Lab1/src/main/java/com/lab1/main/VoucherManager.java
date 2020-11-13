@@ -16,20 +16,18 @@ public class VoucherManager {
         this.selectedVouchers = vouchers;
     }
 
-    public List<Voucher> getVouchers() {
-        return vouchers;
-    }
-
     public List<Voucher> getSelectedVouchers() {
         return selectedVouchers;
     }
 
-    public void sort(Comparator<Voucher> comparator) {
+    public VoucherManager sort(Comparator<Voucher> comparator) {
         selectedVouchers.sort(comparator);
+        return this;
     }
 
-    public void filter(Predicate<Voucher> predicate) {
+    public VoucherManager filter(Predicate<Voucher> predicate) {
         selectedVouchers = selectedVouchers.stream().filter(predicate).collect(Collectors.toList());
+        return this;
     }
 
     public void clearFilters() {

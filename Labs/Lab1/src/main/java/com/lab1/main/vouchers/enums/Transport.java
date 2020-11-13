@@ -13,12 +13,6 @@ public enum Transport {
             return "plane";
         }
     },
-    SHIP {
-        @Override
-        public String toString() {
-            return "ship";
-        }
-    },
     TRAIN {
         @Override
         public String toString() {

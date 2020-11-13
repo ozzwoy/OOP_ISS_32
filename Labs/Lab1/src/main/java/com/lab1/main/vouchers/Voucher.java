@@ -12,6 +12,12 @@ public abstract class Voucher {
     protected String description;
 
     Voucher(String destination, Transport transport, Meals meals, int numOfDays, double price, String description) {
+        if (numOfDays < 1) {
+            throw new IllegalArgumentException("Number of days must be a positive integer.");
+        }
+        if (price < 0) {
+            throw  new IllegalArgumentException("Price cannot be negative.");
+        }
         this.destination = destination;
         this.transport = transport;
         this.meals = meals;
@@ -51,6 +57,6 @@ public abstract class Voucher {
                 "Meals: " + meals.toString() + ".\n" +
                 "Number of days: " + numOfDays + ".\n" +
                 "Price: $" + price + ".\n" +
-                description + ".\n";
+                description + "\n";
     }
 }
