@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class VoucherManagerTest {
-    private static final List<Voucher> VOUCHERS = new ArrayList<>() {
+    private final List<Voucher> vouchers = new ArrayList<>() {
         {
             add(new CruiseVoucher("Port Elizabeth, South Africa", Transport.PLANE, 21, 5000,
                     "Take a chance and try our Trans-Pacific cruise!"));
@@ -28,9 +28,9 @@ public class VoucherManagerTest {
                     2000, "Best treatment services here!"));
         }
     };
-    private static final VoucherManager VOUCHER_MANAGER = new VoucherManager(VOUCHERS);
-    private static final VoucherComparatorBuilder COMPARATOR_BUILDER = new VoucherComparatorBuilder();
-    private static final VoucherPredicateBuilder PREDICATE_BUILDER = new VoucherPredicateBuilder();
+    private final VoucherManager voucherManager = new VoucherManager(vouchers);
+    private final VoucherComparatorBuilder comparatorBuilder = new VoucherComparatorBuilder();
+    private final VoucherPredicateBuilder predicateBuilder = new VoucherPredicateBuilder();
 
     private static final PrintStream CONSOLE_OUT = System.out;
     private final ByteArrayOutputStream outData = new ByteArrayOutputStream();
@@ -42,31 +42,31 @@ public class VoucherManagerTest {
 
     @AfterEach
     public void clearFilters() {
-        VOUCHER_MANAGER.clearFilters();
-        COMPARATOR_BUILDER.reset();
-        PREDICATE_BUILDER.reset();
+        voucherManager.clearFilters();
+        comparatorBuilder.reset();
+        predicateBuilder.reset();
     }
 
     @Test
     public void testFilteringAndSorting() {
-        VOUCHER_MANAGER.filter(PREDICATE_BUILDER.byPrice(100, 5000)
+        voucherManager.filter(predicateBuilder.byPrice(100, 5000)
                                                 .byTransport(Transport.TRAIN, Transport.PLANE)
                                                 .getPredicate())
-                       .sort(COMPARATOR_BUILDER.byDestination().getComparator());
+                       .sort(comparatorBuilder.byDestination().getComparator());
 
-        List<Voucher> selected = VOUCHER_MANAGER.getSelectedVouchers();
-        Assertions.assertTrue(selected.size() == 3 && selected.get(0) == VOUCHERS.get(3) &&
-                               selected.get(1) == VOUCHERS.get(0) && selected.get(2) == VOUCHERS.get(2));
+        List<Voucher> selected = voucherManager.getSelectedVouchers();
+        Assertions.assertTrue(selected.size() == 3 && selected.get(0) == vouchers.get(3) &&
+                               selected.get(1) == vouchers.get(0) && selected.get(2) == vouchers.get(2));
     }
 
     @Test
     public void testShowingVouchers() {
-        VOUCHER_MANAGER.filter(PREDICATE_BUILDER.byPrice(100, 5000)
+        voucherManager.filter(predicateBuilder.byPrice(100, 5000)
                 .byTransport(Transport.PLANE)
                 .getPredicate())
-                .sort(COMPARATOR_BUILDER.byDestination().getComparator());
+                .sort(comparatorBuilder.byDestination().getComparator());
 
-        VOUCHER_MANAGER.showSelectedVouchers();
+        voucherManager.showSelectedVouchers();
         String output = outData.toString().trim().replace("\r", "");
 
         Assertions.assertEquals("-----VACATION VOUCHER-----\n" +

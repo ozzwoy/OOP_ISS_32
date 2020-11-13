@@ -14,7 +14,7 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 public class VoucherPredicateBuilderTest {
-    private static final List<Voucher> VOUCHERS = new ArrayList<>() {
+    private final List<Voucher> vouchers = new ArrayList<>() {
         {
             add(new CruiseVoucher("Port Elizabeth, South Africa", Transport.PLANE, 21, 5000,
                     "Take a chance and try our Trans-Pacific cruise!"));
@@ -28,45 +28,45 @@ public class VoucherPredicateBuilderTest {
                     2000, "Best treatment services here!"));
         }
     };
-    private static final VoucherPredicateBuilder BUILDER = new VoucherPredicateBuilder();
+    private final VoucherPredicateBuilder builder = new VoucherPredicateBuilder();
 
     @AfterEach
     public void resetBuilder() {
-        BUILDER.reset();
+        builder.reset();
     }
 
     @Test
     public void testOnFilteringWithEmptyPredicate() {
-        Predicate<Voucher> predicate = BUILDER.byDestination().getPredicate();
-        List<Voucher> result = VOUCHERS.stream().filter(predicate).collect(Collectors.toList());
+        Predicate<Voucher> predicate = builder.byDestination().getPredicate();
+        List<Voucher> result = vouchers.stream().filter(predicate).collect(Collectors.toList());
         Assertions.assertTrue(result.isEmpty());
     }
 
     @Test
     public void testOnFilteringByDestination() {
-        Predicate<Voucher> predicate = BUILDER.byDestination("Port Elizabeth, South Africa", "Rivne, Ukraine")
+        Predicate<Voucher> predicate = builder.byDestination("Port Elizabeth, South Africa", "Rivne, Ukraine")
                                               .getPredicate();
-        List<Voucher> result = VOUCHERS.stream().filter(predicate).collect(Collectors.toList());
-        Assertions.assertTrue(result.size() == 2 && result.get(0) == VOUCHERS.get(0) &&
-                              result.get(1) == VOUCHERS.get(1));
+        List<Voucher> result = vouchers.stream().filter(predicate).collect(Collectors.toList());
+        Assertions.assertTrue(result.size() == 2 && result.get(0) == vouchers.get(0) &&
+                              result.get(1) == vouchers.get(1));
     }
 
     @Test
     public void testOnFilteringByTransportAndMeals() {
-        Predicate<Voucher> predicate = BUILDER.byTransport(Transport.PLANE, Transport.TRAIN)
+        Predicate<Voucher> predicate = builder.byTransport(Transport.PLANE, Transport.TRAIN)
                                               .byMeals(Meals.NO_LIMIT, Meals.THREE_MEALS_A_DAY)
                                               .getPredicate();
-        List<Voucher> result = VOUCHERS.stream().filter(predicate).collect(Collectors.toList());
-        Assertions.assertTrue(result.size() == 2 && result.get(0) == VOUCHERS.get(0) &&
-                result.get(1) == VOUCHERS.get(3));
+        List<Voucher> result = vouchers.stream().filter(predicate).collect(Collectors.toList());
+        Assertions.assertTrue(result.size() == 2 && result.get(0) == vouchers.get(0) &&
+                result.get(1) == vouchers.get(3));
     }
 
     @Test
     public void testOnFilteringByNumOfDaysAndPrice() {
-        Predicate<Voucher> predicate = BUILDER.byNumOfDays(7, 14)
+        Predicate<Voucher> predicate = builder.byNumOfDays(7, 14)
                                               .byPrice(0, 2000)
                                               .getPredicate();
-        List<Voucher> result = VOUCHERS.stream().filter(predicate).collect(Collectors.toList());
-        Assertions.assertTrue(result.size() == 1 && result.get(0) == VOUCHERS.get(4));
+        List<Voucher> result = vouchers.stream().filter(predicate).collect(Collectors.toList());
+        Assertions.assertTrue(result.size() == 1 && result.get(0) == vouchers.get(4));
     }
 }

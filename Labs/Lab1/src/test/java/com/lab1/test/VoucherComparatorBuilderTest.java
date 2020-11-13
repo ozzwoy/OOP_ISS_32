@@ -11,7 +11,7 @@ import java.util.Comparator;
 import java.util.List;
 
 public class VoucherComparatorBuilderTest {
-    private static final List<Voucher> VOUCHERS = new ArrayList<>() {
+    private final List<Voucher> vouchers = new ArrayList<>() {
         {
             add(new CruiseVoucher("Port Elizabeth, South Africa", Transport.PLANE, 21, 5000,
                                   "Take a chance and try our Trans-Pacific cruise!"));
@@ -25,66 +25,65 @@ public class VoucherComparatorBuilderTest {
                                     2000, "Best treatment services here!"));
         }
     };
-    private static final List<Voucher> VOUCHERS_COPY = new ArrayList<>(VOUCHERS.size());
-    private static final VoucherComparatorBuilder BUILDER = new VoucherComparatorBuilder();
-
-    @BeforeAll
-    public static void copyVouchers() {
-        VOUCHERS_COPY.addAll(VOUCHERS);
-    }
+    private final List<Voucher> vouchersCopy = new ArrayList<>(vouchers.size()) {
+        {
+            addAll(vouchers);
+        }
+    };
+    private final VoucherComparatorBuilder builder = new VoucherComparatorBuilder();
 
     @AfterEach
     public void resetBuilder() {
-        BUILDER.reset();
+        builder.reset();
     }
 
     @Test
     public void testOnSortingByDestination() {
-        Comparator<Voucher> comparator = BUILDER.byDestination()
+        Comparator<Voucher> comparator = builder.byDestination()
                                                 .getComparator();
-        VOUCHERS_COPY.sort(comparator);
-        Assertions.assertTrue(VOUCHERS_COPY.get(0) == VOUCHERS.get(4) &&
-                              VOUCHERS_COPY.get(1) == VOUCHERS.get(3) &&
-                              VOUCHERS_COPY.get(2) == VOUCHERS.get(0) &&
-                              VOUCHERS_COPY.get(3) == VOUCHERS.get(1) &&
-                              VOUCHERS_COPY.get(4) == VOUCHERS.get(2));
+        vouchersCopy.sort(comparator);
+        Assertions.assertTrue(vouchersCopy.get(0) == vouchers.get(4) &&
+                              vouchersCopy.get(1) == vouchers.get(3) &&
+                              vouchersCopy.get(2) == vouchers.get(0) &&
+                              vouchersCopy.get(3) == vouchers.get(1) &&
+                              vouchersCopy.get(4) == vouchers.get(2));
     }
 
     @Test
     public void testOnSortingByPriceDescending() {
-        Comparator<Voucher> comparator = BUILDER.byPriceDescending()
+        Comparator<Voucher> comparator = builder.byPriceDescending()
                                                 .getComparator();
-        VOUCHERS_COPY.sort(comparator);
-        Assertions.assertTrue(VOUCHERS_COPY.get(0) == VOUCHERS.get(0) &&
-                              VOUCHERS_COPY.get(1) == VOUCHERS.get(3) &&
-                              VOUCHERS_COPY.get(2) == VOUCHERS.get(4) &&
-                              VOUCHERS_COPY.get(3) == VOUCHERS.get(2) &&
-                              VOUCHERS_COPY.get(4) == VOUCHERS.get(1));
+        vouchersCopy.sort(comparator);
+        Assertions.assertTrue(vouchersCopy.get(0) == vouchers.get(0) &&
+                              vouchersCopy.get(1) == vouchers.get(3) &&
+                              vouchersCopy.get(2) == vouchers.get(4) &&
+                              vouchersCopy.get(3) == vouchers.get(2) &&
+                              vouchersCopy.get(4) == vouchers.get(1));
     }
 
     @Test
     public void testOnSortingByNumOfDaysAndPrice() {
-        Comparator<Voucher> comparator = BUILDER.byNumOfDays()
+        Comparator<Voucher> comparator = builder.byNumOfDays()
                                                 .byPrice()
                                                 .getComparator();
-        VOUCHERS_COPY.sort(comparator);
-        Assertions.assertTrue(VOUCHERS_COPY.get(0) == VOUCHERS.get(1) &&
-                              VOUCHERS_COPY.get(1) == VOUCHERS.get(2) &&
-                              VOUCHERS_COPY.get(2) == VOUCHERS.get(4) &&
-                              VOUCHERS_COPY.get(3) == VOUCHERS.get(3) &&
-                              VOUCHERS_COPY.get(4) == VOUCHERS.get(0));
+        vouchersCopy.sort(comparator);
+        Assertions.assertTrue(vouchersCopy.get(0) == vouchers.get(1) &&
+                              vouchersCopy.get(1) == vouchers.get(2) &&
+                              vouchersCopy.get(2) == vouchers.get(4) &&
+                              vouchersCopy.get(3) == vouchers.get(3) &&
+                              vouchersCopy.get(4) == vouchers.get(0));
     }
 
     @Test
     public void testOnSortingByNumOfDaysDescendingAndDestinationDescending() {
-        Comparator<Voucher> comparator = BUILDER.byNumOfDaysDescending()
+        Comparator<Voucher> comparator = builder.byNumOfDaysDescending()
                                                 .byDestinationDescending()
                                                 .getComparator();
-        VOUCHERS_COPY.sort(comparator);
-        Assertions.assertTrue(VOUCHERS_COPY.get(0) == VOUCHERS.get(0) &&
-                              VOUCHERS_COPY.get(1) == VOUCHERS.get(3) &&
-                              VOUCHERS_COPY.get(2) == VOUCHERS.get(4) &&
-                              VOUCHERS_COPY.get(3) == VOUCHERS.get(2) &&
-                              VOUCHERS_COPY.get(4) == VOUCHERS.get(1));
+        vouchersCopy.sort(comparator);
+        Assertions.assertTrue(vouchersCopy.get(0) == vouchers.get(0) &&
+                              vouchersCopy.get(1) == vouchers.get(3) &&
+                              vouchersCopy.get(2) == vouchers.get(4) &&
+                              vouchersCopy.get(3) == vouchers.get(2) &&
+                              vouchersCopy.get(4) == vouchers.get(1));
     }
 }
