@@ -4,7 +4,6 @@ import com.lab1.main.vouchers.Voucher;
 import com.lab1.main.vouchers.enums.Meals;
 import com.lab1.main.vouchers.enums.Transport;
 
-import java.util.Arrays;
 import java.util.function.Predicate;
 
 public class VoucherPredicateBuilder {

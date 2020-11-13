@@ -39,7 +39,7 @@ public class VoucherComparatorBuilderTest {
     }
 
     @Test
-    public void testSortingByDestination() {
+    public void testOnSortingByDestination() {
         Comparator<Voucher> comparator = BUILDER.byDestination()
                                                 .getComparator();
         VOUCHERS_COPY.sort(comparator);
@@ -51,7 +51,7 @@ public class VoucherComparatorBuilderTest {
     }
 
     @Test
-    public void testSortingByPriceDescending() {
+    public void testOnSortingByPriceDescending() {
         Comparator<Voucher> comparator = BUILDER.byPriceDescending()
                                                 .getComparator();
         VOUCHERS_COPY.sort(comparator);
@@ -63,7 +63,7 @@ public class VoucherComparatorBuilderTest {
     }
 
     @Test
-    public void testSortingByNumOfDaysAndPrice() {
+    public void testOnSortingByNumOfDaysAndPrice() {
         Comparator<Voucher> comparator = BUILDER.byNumOfDays()
                                                 .byPrice()
                                                 .getComparator();
@@ -76,7 +76,7 @@ public class VoucherComparatorBuilderTest {
     }
 
     @Test
-    public void testSortingByNumOfDaysDescendingAndDestinationDescending() {
+    public void testOnSortingByNumOfDaysDescendingAndDestinationDescending() {
         Comparator<Voucher> comparator = BUILDER.byNumOfDaysDescending()
                                                 .byDestinationDescending()
                                                 .getComparator();

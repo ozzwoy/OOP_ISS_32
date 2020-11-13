@@ -1,0 +1,146 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: Voucher</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">com.lab1.main.vouchers</a> ]
+</div>
+
+<h1>Coverage Summary for Class: Voucher (com.lab1.main.vouchers)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">Voucher</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (8/ 8)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (21/ 21)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package com.lab1.main.vouchers;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import com.lab1.main.vouchers.enums.Meals;
+<i>4</i>&nbsp;import com.lab1.main.vouchers.enums.Transport;
+<i>5</i>&nbsp;
+<i>6</i>&nbsp;public abstract class Voucher {
+<i>7</i>&nbsp;    protected String destination;
+<i>8</i>&nbsp;    protected Transport transport;
+<i>9</i>&nbsp;    protected Meals meals;
+<i>10</i>&nbsp;    protected int numOfDays;
+<i>11</i>&nbsp;    protected double price;
+<i>12</i>&nbsp;    protected String description;
+<i>13</i>&nbsp;
+<b class="fc"><i>14</i>&nbsp;    Voucher(String destination, Transport transport, Meals meals, int numOfDays, double price, String description) {</b>
+<b class="fc"><i>15</i>&nbsp;        if (numOfDays &lt; 1) {</b>
+<b class="fc"><i>16</i>&nbsp;            throw new IllegalArgumentException(&quot;Number of days must be a positive integer. Provided: &quot; + numOfDays</b>
+<i>17</i>&nbsp;                                               + &quot;.&quot;);
+<i>18</i>&nbsp;        }
+<b class="fc"><i>19</i>&nbsp;        if (price &lt; 0) {</b>
+<b class="fc"><i>20</i>&nbsp;            throw  new IllegalArgumentException(&quot;Price cannot be negative. Provided: &quot; + price + &quot;.&quot;);</b>
+<i>21</i>&nbsp;        }
+<b class="fc"><i>22</i>&nbsp;        this.destination = destination;</b>
+<b class="fc"><i>23</i>&nbsp;        this.transport = transport;</b>
+<b class="fc"><i>24</i>&nbsp;        this.meals = meals;</b>
+<b class="fc"><i>25</i>&nbsp;        this.numOfDays = numOfDays;</b>
+<b class="fc"><i>26</i>&nbsp;        this.price = price;</b>
+<b class="fc"><i>27</i>&nbsp;        this.description = description;</b>
+<b class="fc"><i>28</i>&nbsp;    }</b>
+<i>29</i>&nbsp;
+<i>30</i>&nbsp;    public String getDestination() {
+<b class="fc"><i>31</i>&nbsp;        return destination;</b>
+<i>32</i>&nbsp;    }
+<i>33</i>&nbsp;
+<i>34</i>&nbsp;    public Transport getTransport() {
+<b class="fc"><i>35</i>&nbsp;        return transport;</b>
+<i>36</i>&nbsp;    }
+<i>37</i>&nbsp;
+<i>38</i>&nbsp;    public Meals getMeals() {
+<b class="fc"><i>39</i>&nbsp;        return meals;</b>
+<i>40</i>&nbsp;    }
+<i>41</i>&nbsp;
+<i>42</i>&nbsp;    public int getNumOfDays() {
+<b class="fc"><i>43</i>&nbsp;        return numOfDays;</b>
+<i>44</i>&nbsp;    }
+<i>45</i>&nbsp;
+<i>46</i>&nbsp;    public double getPrice() {
+<b class="fc"><i>47</i>&nbsp;        return price;</b>
+<i>48</i>&nbsp;    }
+<i>49</i>&nbsp;
+<i>50</i>&nbsp;    public String getDescription() {
+<b class="fc"><i>51</i>&nbsp;        return description;</b>
+<i>52</i>&nbsp;    }
+<i>53</i>&nbsp;
+<i>54</i>&nbsp;    @Override
+<i>55</i>&nbsp;    public String toString() {
+<b class="fc"><i>56</i>&nbsp;        return &quot;Destination: &quot; + destination + &quot;.\n&quot; +</b>
+<b class="fc"><i>57</i>&nbsp;                &quot;Transport: &quot; + transport.toString() + &quot;.\n&quot; +</b>
+<b class="fc"><i>58</i>&nbsp;                &quot;Meals: &quot; + meals.toString() + &quot;.\n&quot; +</b>
+<i>59</i>&nbsp;                &quot;Number of days: &quot; + numOfDays + &quot;.\n&quot; +
+<i>60</i>&nbsp;                &quot;Price: $&quot; + price + &quot;.\n&quot; +
+<i>61</i>&nbsp;                description + &quot;\n&quot;;
+<i>62</i>&nbsp;    }
+<i>63</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-11-13 17:22</div>
+</div>
+</body>
+</html>
