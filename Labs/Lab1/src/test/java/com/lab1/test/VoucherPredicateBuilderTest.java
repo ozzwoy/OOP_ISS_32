@@ -4,9 +4,15 @@ import com.lab1.main.builders.VoucherPredicateBuilder;
 import com.lab1.main.vouchers.*;
 import com.lab1.main.vouchers.enums.Meals;
 import com.lab1.main.vouchers.enums.Transport;
+import com.lab1.main.vouchers.exceptions.NegativeNumberOfDaysException;
+import com.lab1.main.vouchers.exceptions.NegativePriceException;
+import org.apache.log4j.LogManager;
+import org.apache.log4j.PropertyConfigurator;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,18 +20,26 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 public class VoucherPredicateBuilderTest {
+    static {
+        new PropertyConfigurator().doConfigure("log4j.properties", LogManager.getLoggerRepository());
+    }
+    private static final Logger LOGGER = LoggerFactory.getLogger(VoucherPredicateBuilderTest.class);
     private final List<Voucher> vouchers = new ArrayList<>() {
         {
-            add(new CruiseVoucher("Port Elizabeth, South Africa", Transport.PLANE, 21, 5000,
-                    "Take a chance and try our Trans-Pacific cruise!"));
-            add(new ExcursionVoucher("Rivne, Ukraine", Transport.BUS, Meals.ONE_MEAL_A_DAY, 1,
-                    30, "Visit famous Rivne Zoo with your family!"));
-            add(new ShoppingVoucher("Warsaw, Poland", Transport.TRAIN, Meals.NO_MEALS, 1, 100,
-                    "Set out for a day-trip to the best boutiques in a capital of Poland!"));
-            add(new VacationVoucher("Phuket, Thailand", Transport.PLANE, Meals.THREE_MEALS_A_DAY, 14,
-                    3500, "Spend your vacation on exotic beaches of Thailand!"));
-            add(new WellnessVoucher("Bern, Switzerland", Transport.BUS, Meals.TWO_MEALS_A_DAY, 14,
-                    2000, "Best treatment services here!"));
+            try {
+                add(new CruiseVoucher("Port Elizabeth, South Africa", Transport.PLANE, 21,
+                        5000, "Take a chance and try our Trans-Pacific cruise!"));
+                add(new ExcursionVoucher("Rivne, Ukraine", Transport.BUS, Meals.ONE_MEAL_A_DAY, 1,
+                        30, "Visit famous Rivne Zoo with your family!"));
+                add(new ShoppingVoucher("Warsaw, Poland", Transport.TRAIN, Meals.NO_MEALS, 1,
+                        100, "Set out for a day-trip to the best boutiques in a capital of Poland!"));
+                add(new VacationVoucher("Phuket, Thailand", Transport.PLANE, Meals.THREE_MEALS_A_DAY,
+                        14, 3500, "Spend your vacation on exotic beaches of Thailand!"));
+                add(new WellnessVoucher("Bern, Switzerland", Transport.BUS, Meals.TWO_MEALS_A_DAY,
+                        14, 2000, "Best treatment services here!"));
+            } catch (NegativeNumberOfDaysException | NegativePriceException e) {
+                LOGGER.error("Error while creating test data.", e);
+            }
         }
     };
     private final VoucherPredicateBuilder builder = new VoucherPredicateBuilder();
@@ -40,6 +54,14 @@ public class VoucherPredicateBuilderTest {
         Predicate<Voucher> predicate = builder.byDestination().getPredicate();
         List<Voucher> result = vouchers.stream().filter(predicate).collect(Collectors.toList());
         Assertions.assertTrue(result.isEmpty());
+    }
+
+    @Test
+    public void testOnFilteringByType() {
+        Predicate<Voucher> predicate = builder.byType("CruiseVoucher", "VacationVoucher").getPredicate();
+        List<Voucher> result = vouchers.stream().filter(predicate).collect(Collectors.toList());
+        Assertions.assertTrue(result.size() == 2 && result.get(0) == vouchers.get(0) &&
+                              result.get(1) == vouchers.get(3));
     }
 
     @Test

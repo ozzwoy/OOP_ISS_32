@@ -17,6 +17,15 @@ public class VoucherPredicateBuilder {
         return predicate;
     }
 
+    public VoucherPredicateBuilder byType(String... types) {
+        Predicate<Voucher> subpredicate = voucher -> false;
+        for (String current : types) {
+            subpredicate = subpredicate.or(voucher -> voucher.getClass().getSimpleName().equals(current));
+        }
+        predicate = predicate.and(subpredicate);
+        return this;
+    }
+
     public VoucherPredicateBuilder byDestination(String... destinations) {
         Predicate<Voucher> subpredicate = voucher -> false;
         for (String current : destinations) {

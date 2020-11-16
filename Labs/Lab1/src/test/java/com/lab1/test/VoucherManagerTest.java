@@ -6,7 +6,13 @@ import com.lab1.main.builders.VoucherPredicateBuilder;
 import com.lab1.main.vouchers.*;
 import com.lab1.main.vouchers.enums.Meals;
 import com.lab1.main.vouchers.enums.Transport;
+import com.lab1.main.vouchers.exceptions.NegativeNumberOfDaysException;
+import com.lab1.main.vouchers.exceptions.NegativePriceException;
+import org.apache.log4j.LogManager;
+import org.apache.log4j.PropertyConfigurator;
 import org.junit.jupiter.api.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
@@ -14,18 +20,26 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class VoucherManagerTest {
+    static {
+        new PropertyConfigurator().doConfigure("log4j.properties", LogManager.getLoggerRepository());
+    }
+    private static final Logger LOGGER = LoggerFactory.getLogger(VoucherManagerTest.class);
     private final List<Voucher> vouchers = new ArrayList<>() {
         {
-            add(new CruiseVoucher("Port Elizabeth, South Africa", Transport.PLANE, 21, 5000,
-                    "Take a chance and try our Trans-Pacific cruise!"));
-            add(new ExcursionVoucher("Rivne, Ukraine", Transport.BUS, Meals.ONE_MEAL_A_DAY, 1,
-                    30, "Visit famous Rivne Zoo with your family!"));
-            add(new ShoppingVoucher("Warsaw, Poland", Transport.TRAIN, Meals.NO_MEALS, 1, 100,
-                    "Set out for a day-trip to the best boutiques in a capital of Poland!"));
-            add(new VacationVoucher("Phuket, Thailand", Transport.PLANE, Meals.THREE_MEALS_A_DAY, 14,
-                    3500, "Spend your vacation on exotic beaches of Thailand!"));
-            add(new WellnessVoucher("Bern, Switzerland", Transport.BUS, Meals.TWO_MEALS_A_DAY, 14,
-                    2000, "Best treatment services here!"));
+            try {
+                add(new CruiseVoucher("Port Elizabeth, South Africa", Transport.PLANE, 21,
+                        5000, "Take a chance and try our Trans-Pacific cruise!"));
+                add(new ExcursionVoucher("Rivne, Ukraine", Transport.BUS, Meals.ONE_MEAL_A_DAY, 1,
+                        30, "Visit famous Rivne Zoo with your family!"));
+                add(new ShoppingVoucher("Warsaw, Poland", Transport.TRAIN, Meals.NO_MEALS, 1,
+                        100, "Set out for a day-trip to the best boutiques in a capital of Poland!"));
+                add(new VacationVoucher("Phuket, Thailand", Transport.PLANE, Meals.THREE_MEALS_A_DAY,
+                        14, 3500, "Spend your vacation on exotic beaches of Thailand!"));
+                add(new WellnessVoucher("Bern, Switzerland", Transport.BUS, Meals.TWO_MEALS_A_DAY,
+                        14, 2000, "Best treatment services here!"));
+            } catch (NegativeNumberOfDaysException | NegativePriceException e) {
+                LOGGER.error("Error while creating test data.", e);
+            }
         }
     };
     private final VoucherManager voucherManager = new VoucherManager(vouchers);

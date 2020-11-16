@@ -3,6 +3,8 @@ package com.lab1.test;
 import com.lab1.main.vouchers.*;
 import com.lab1.main.vouchers.enums.Meals;
 import com.lab1.main.vouchers.enums.Transport;
+import com.lab1.main.vouchers.exceptions.NegativeNumberOfDaysException;
+import com.lab1.main.vouchers.exceptions.NegativePriceException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -10,20 +12,20 @@ public class VoucherTest {
 
     @Test
     public void testOnNegativeNumOfDays() {
-        Assertions.assertThrows(IllegalArgumentException.class, () -> new CruiseVoucher("Some destination",
+        Assertions.assertThrows(NegativeNumberOfDaysException.class, () -> new CruiseVoucher("Some destination",
                         Transport.BUS, 0, 300, "Some description"),
                 "Number of days must be a positive integer. Provided: 0.");
     }
 
     @Test
     public void testOnNegativePrice() {
-        Assertions.assertThrows(IllegalArgumentException.class, () -> new CruiseVoucher("Some destination",
+        Assertions.assertThrows(NegativePriceException.class, () -> new CruiseVoucher("Some destination",
                         Transport.BUS, 1, -300, "Some description"),
                 "Price cannot be negative. Provided: -300.");
     }
 
     @Test
-    public void testCommonDescription() {
+    public void testCommonDescription() throws NegativeNumberOfDaysException, NegativePriceException {
         Voucher voucher = new CruiseVoucher("Some destination", Transport.PLANE, 2, 300,
                                             "Some description.");
         String description = voucher.toString();
@@ -35,7 +37,7 @@ public class VoucherTest {
     }
 
     @Test
-    public void testCruiseVoucherToString() {
+    public void testCruiseVoucherToString() throws NegativeNumberOfDaysException, NegativePriceException {
         Voucher voucher = new CruiseVoucher("Some destination", Transport.PLANE, 2, 300,
                 "Some description.");
         String description = voucher.toString().toLowerCase();
@@ -43,7 +45,7 @@ public class VoucherTest {
     }
 
     @Test
-    public void testExcursionVoucherToString() {
+    public void testExcursionVoucherToString() throws NegativeNumberOfDaysException, NegativePriceException {
         Voucher voucher = new ExcursionVoucher("Some destination", Transport.PLANE, Meals.ONE_MEAL_A_DAY,
                                                2, 300, "Some description.");
         String description = voucher.toString().toLowerCase();
@@ -51,7 +53,7 @@ public class VoucherTest {
     }
 
     @Test
-    public void testShoppingVoucherToString() {
+    public void testShoppingVoucherToString() throws NegativeNumberOfDaysException, NegativePriceException {
         Voucher voucher = new ShoppingVoucher("Some destination", Transport.PLANE, Meals.ONE_MEAL_A_DAY,
                                               2, 300, "Some description.");
         String description = voucher.toString().toLowerCase();
@@ -59,7 +61,7 @@ public class VoucherTest {
     }
 
     @Test
-    public void testVacationVoucherToString() {
+    public void testVacationVoucherToString() throws NegativeNumberOfDaysException, NegativePriceException {
         Voucher voucher = new VacationVoucher("Some destination", Transport.PLANE, Meals.ONE_MEAL_A_DAY,
                                               2, 300, "Some description.");
         String description = voucher.toString().toLowerCase();
@@ -67,7 +69,7 @@ public class VoucherTest {
     }
 
     @Test
-    public void testWellnessVoucherToString() {
+    public void testWellnessVoucherToString() throws NegativeNumberOfDaysException, NegativePriceException {
         Voucher voucher = new WellnessVoucher("Some destination", Transport.PLANE, Meals.ONE_MEAL_A_DAY,
                                               2, 300, "Some description.");
         String description = voucher.toString().toLowerCase();

@@ -2,6 +2,8 @@ package com.lab1.main.vouchers;
 
 import com.lab1.main.vouchers.enums.Meals;
 import com.lab1.main.vouchers.enums.Transport;
+import com.lab1.main.vouchers.exceptions.NegativeNumberOfDaysException;
+import com.lab1.main.vouchers.exceptions.NegativePriceException;
 
 public abstract class Voucher {
     protected String destination;
@@ -11,14 +13,17 @@ public abstract class Voucher {
     protected double price;
     protected String description;
 
-    Voucher(String destination, Transport transport, Meals meals, int numOfDays, double price, String description) {
+    Voucher(String destination, Transport transport, Meals meals, int numOfDays, double price, String description)
+            throws NegativeNumberOfDaysException, NegativePriceException {
+
         if (numOfDays < 1) {
-            throw new IllegalArgumentException("Number of days must be a positive integer. Provided: " + numOfDays
-                                               + ".");
+            throw new NegativeNumberOfDaysException("Number of days must be a positive integer. Provided: " + numOfDays
+                                                    + ".");
         }
         if (price < 0) {
-            throw  new IllegalArgumentException("Price cannot be negative. Provided: " + price + ".");
+            throw  new NegativePriceException("Price cannot be negative. Provided: " + price + ".");
         }
+
         this.destination = destination;
         this.transport = transport;
         this.meals = meals;

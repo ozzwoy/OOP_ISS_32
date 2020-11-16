@@ -76,71 +76,76 @@
 <i>2</i>&nbsp;
 <i>3</i>&nbsp;import com.lab1.main.vouchers.enums.Meals;
 <i>4</i>&nbsp;import com.lab1.main.vouchers.enums.Transport;
-<i>5</i>&nbsp;
-<i>6</i>&nbsp;public abstract class Voucher {
-<i>7</i>&nbsp;    protected String destination;
-<i>8</i>&nbsp;    protected Transport transport;
-<i>9</i>&nbsp;    protected Meals meals;
-<i>10</i>&nbsp;    protected int numOfDays;
-<i>11</i>&nbsp;    protected double price;
-<i>12</i>&nbsp;    protected String description;
-<i>13</i>&nbsp;
-<b class="fc"><i>14</i>&nbsp;    Voucher(String destination, Transport transport, Meals meals, int numOfDays, double price, String description) {</b>
-<b class="fc"><i>15</i>&nbsp;        if (numOfDays &lt; 1) {</b>
-<b class="fc"><i>16</i>&nbsp;            throw new IllegalArgumentException(&quot;Number of days must be a positive integer. Provided: &quot; + numOfDays</b>
-<i>17</i>&nbsp;                                               + &quot;.&quot;);
-<i>18</i>&nbsp;        }
-<b class="fc"><i>19</i>&nbsp;        if (price &lt; 0) {</b>
-<b class="fc"><i>20</i>&nbsp;            throw  new IllegalArgumentException(&quot;Price cannot be negative. Provided: &quot; + price + &quot;.&quot;);</b>
-<i>21</i>&nbsp;        }
-<b class="fc"><i>22</i>&nbsp;        this.destination = destination;</b>
-<b class="fc"><i>23</i>&nbsp;        this.transport = transport;</b>
-<b class="fc"><i>24</i>&nbsp;        this.meals = meals;</b>
-<b class="fc"><i>25</i>&nbsp;        this.numOfDays = numOfDays;</b>
-<b class="fc"><i>26</i>&nbsp;        this.price = price;</b>
-<b class="fc"><i>27</i>&nbsp;        this.description = description;</b>
-<b class="fc"><i>28</i>&nbsp;    }</b>
-<i>29</i>&nbsp;
-<i>30</i>&nbsp;    public String getDestination() {
-<b class="fc"><i>31</i>&nbsp;        return destination;</b>
-<i>32</i>&nbsp;    }
-<i>33</i>&nbsp;
-<i>34</i>&nbsp;    public Transport getTransport() {
-<b class="fc"><i>35</i>&nbsp;        return transport;</b>
-<i>36</i>&nbsp;    }
-<i>37</i>&nbsp;
-<i>38</i>&nbsp;    public Meals getMeals() {
-<b class="fc"><i>39</i>&nbsp;        return meals;</b>
-<i>40</i>&nbsp;    }
-<i>41</i>&nbsp;
-<i>42</i>&nbsp;    public int getNumOfDays() {
-<b class="fc"><i>43</i>&nbsp;        return numOfDays;</b>
-<i>44</i>&nbsp;    }
-<i>45</i>&nbsp;
-<i>46</i>&nbsp;    public double getPrice() {
-<b class="fc"><i>47</i>&nbsp;        return price;</b>
-<i>48</i>&nbsp;    }
-<i>49</i>&nbsp;
-<i>50</i>&nbsp;    public String getDescription() {
-<b class="fc"><i>51</i>&nbsp;        return description;</b>
-<i>52</i>&nbsp;    }
-<i>53</i>&nbsp;
-<i>54</i>&nbsp;    @Override
-<i>55</i>&nbsp;    public String toString() {
-<b class="fc"><i>56</i>&nbsp;        return &quot;Destination: &quot; + destination + &quot;.\n&quot; +</b>
-<b class="fc"><i>57</i>&nbsp;                &quot;Transport: &quot; + transport.toString() + &quot;.\n&quot; +</b>
-<b class="fc"><i>58</i>&nbsp;                &quot;Meals: &quot; + meals.toString() + &quot;.\n&quot; +</b>
-<i>59</i>&nbsp;                &quot;Number of days: &quot; + numOfDays + &quot;.\n&quot; +
-<i>60</i>&nbsp;                &quot;Price: $&quot; + price + &quot;.\n&quot; +
-<i>61</i>&nbsp;                description + &quot;\n&quot;;
-<i>62</i>&nbsp;    }
-<i>63</i>&nbsp;}
+<i>5</i>&nbsp;import com.lab1.main.vouchers.exceptions.NegativeNumberOfDaysException;
+<i>6</i>&nbsp;import com.lab1.main.vouchers.exceptions.NegativePriceException;
+<i>7</i>&nbsp;
+<i>8</i>&nbsp;public abstract class Voucher {
+<i>9</i>&nbsp;    protected String destination;
+<i>10</i>&nbsp;    protected Transport transport;
+<i>11</i>&nbsp;    protected Meals meals;
+<i>12</i>&nbsp;    protected int numOfDays;
+<i>13</i>&nbsp;    protected double price;
+<i>14</i>&nbsp;    protected String description;
+<i>15</i>&nbsp;
+<i>16</i>&nbsp;    Voucher(String destination, Transport transport, Meals meals, int numOfDays, double price, String description)
+<b class="fc"><i>17</i>&nbsp;            throws NegativeNumberOfDaysException, NegativePriceException {</b>
+<i>18</i>&nbsp;
+<b class="fc"><i>19</i>&nbsp;        if (numOfDays &lt; 1) {</b>
+<b class="fc"><i>20</i>&nbsp;            throw new NegativeNumberOfDaysException(&quot;Number of days must be a positive integer. Provided: &quot; + numOfDays</b>
+<i>21</i>&nbsp;                                                    + &quot;.&quot;);
+<i>22</i>&nbsp;        }
+<b class="fc"><i>23</i>&nbsp;        if (price &lt; 0) {</b>
+<b class="fc"><i>24</i>&nbsp;            throw  new NegativePriceException(&quot;Price cannot be negative. Provided: &quot; + price + &quot;.&quot;);</b>
+<i>25</i>&nbsp;        }
+<i>26</i>&nbsp;
+<b class="fc"><i>27</i>&nbsp;        this.destination = destination;</b>
+<b class="fc"><i>28</i>&nbsp;        this.transport = transport;</b>
+<b class="fc"><i>29</i>&nbsp;        this.meals = meals;</b>
+<b class="fc"><i>30</i>&nbsp;        this.numOfDays = numOfDays;</b>
+<b class="fc"><i>31</i>&nbsp;        this.price = price;</b>
+<b class="fc"><i>32</i>&nbsp;        this.description = description;</b>
+<b class="fc"><i>33</i>&nbsp;    }</b>
+<i>34</i>&nbsp;
+<i>35</i>&nbsp;    public String getDestination() {
+<b class="fc"><i>36</i>&nbsp;        return destination;</b>
+<i>37</i>&nbsp;    }
+<i>38</i>&nbsp;
+<i>39</i>&nbsp;    public Transport getTransport() {
+<b class="fc"><i>40</i>&nbsp;        return transport;</b>
+<i>41</i>&nbsp;    }
+<i>42</i>&nbsp;
+<i>43</i>&nbsp;    public Meals getMeals() {
+<b class="fc"><i>44</i>&nbsp;        return meals;</b>
+<i>45</i>&nbsp;    }
+<i>46</i>&nbsp;
+<i>47</i>&nbsp;    public int getNumOfDays() {
+<b class="fc"><i>48</i>&nbsp;        return numOfDays;</b>
+<i>49</i>&nbsp;    }
+<i>50</i>&nbsp;
+<i>51</i>&nbsp;    public double getPrice() {
+<b class="fc"><i>52</i>&nbsp;        return price;</b>
+<i>53</i>&nbsp;    }
+<i>54</i>&nbsp;
+<i>55</i>&nbsp;    public String getDescription() {
+<b class="fc"><i>56</i>&nbsp;        return description;</b>
+<i>57</i>&nbsp;    }
+<i>58</i>&nbsp;
+<i>59</i>&nbsp;    @Override
+<i>60</i>&nbsp;    public String toString() {
+<b class="fc"><i>61</i>&nbsp;        return &quot;Destination: &quot; + destination + &quot;.\n&quot; +</b>
+<b class="fc"><i>62</i>&nbsp;                &quot;Transport: &quot; + transport.toString() + &quot;.\n&quot; +</b>
+<b class="fc"><i>63</i>&nbsp;                &quot;Meals: &quot; + meals.toString() + &quot;.\n&quot; +</b>
+<i>64</i>&nbsp;                &quot;Number of days: &quot; + numOfDays + &quot;.\n&quot; +
+<i>65</i>&nbsp;                &quot;Price: $&quot; + price + &quot;.\n&quot; +
+<i>66</i>&nbsp;                description + &quot;\n&quot;;
+<i>67</i>&nbsp;    }
+<i>68</i>&nbsp;}
 </div>
 </div>
 
 <div class="footer">
     
-    <div style="float:right;">generated on 2020-11-13 17:45</div>
+    <div style="float:right;">generated on 2020-11-16 20:41</div>
 </div>
 </body>
 </html>
