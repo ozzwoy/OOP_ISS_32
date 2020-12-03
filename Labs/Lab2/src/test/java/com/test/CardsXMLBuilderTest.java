@@ -19,7 +19,7 @@ import java.util.List;
 public class CardsXMLBuilderTest {
     @Test
     public void testWithValidator() throws IOException, SAXException {
-        String fileName = "src/test/resources/builder_test_xml.xml";
+        String fileName = "src/test/resources/builder_test.xml";
         List<Card> cards = new ArrayList<>() {
             {
                 add(new Card("KU67234", Theme.CITY_SCENERY, new Type(true, Kind.ADVERTISEMENT), "USA",

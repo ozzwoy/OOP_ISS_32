@@ -1,0 +1,127 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: CardsSAXParser</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">com.main.parsers</a> ]
+</div>
+
+<h1>Coverage Summary for Class: CardsSAXParser (com.main.parsers)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">CardsSAXParser</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (3/ 3)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    76,5%
+  </span>
+  <span class="absValue">
+    (13/ 17)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package com.main.parsers;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import org.apache.log4j.LogManager;
+<i>4</i>&nbsp;import org.apache.log4j.PropertyConfigurator;
+<i>5</i>&nbsp;import org.slf4j.Logger;
+<i>6</i>&nbsp;import org.slf4j.LoggerFactory;
+<i>7</i>&nbsp;import org.xml.sax.SAXException;
+<i>8</i>&nbsp;
+<i>9</i>&nbsp;import javax.xml.parsers.ParserConfigurationException;
+<i>10</i>&nbsp;import javax.xml.parsers.SAXParser;
+<i>11</i>&nbsp;import javax.xml.parsers.SAXParserFactory;
+<i>12</i>&nbsp;import java.io.IOException;
+<i>13</i>&nbsp;import java.util.Collections;
+<i>14</i>&nbsp;
+<i>15</i>&nbsp;public class CardsSAXParser extends AbstractCardsParser {
+<i>16</i>&nbsp;    static {
+<b class="fc"><i>17</i>&nbsp;        new PropertyConfigurator().doConfigure(&quot;log4j.properties&quot;, LogManager.getLoggerRepository());</b>
+<i>18</i>&nbsp;    }
+<b class="fc"><i>19</i>&nbsp;    private static final Logger LOGGER = LoggerFactory.getLogger(CardsSAXParser.class);</b>
+<i>20</i>&nbsp;
+<i>21</i>&nbsp;    private final CardsHandler cardsHandler;
+<i>22</i>&nbsp;    private SAXParser parser;
+<i>23</i>&nbsp;
+<b class="fc"><i>24</i>&nbsp;    public CardsSAXParser() {</b>
+<b class="fc"><i>25</i>&nbsp;        cardsHandler = new CardsHandler();</b>
+<b class="fc"><i>26</i>&nbsp;        SAXParserFactory factory = SAXParserFactory.newInstance();</b>
+<i>27</i>&nbsp;        try {
+<b class="fc"><i>28</i>&nbsp;            parser = factory.newSAXParser();</b>
+<b class="nc"><i>29</i>&nbsp;        } catch (ParserConfigurationException | SAXException e) {</b>
+<b class="nc"><i>30</i>&nbsp;            LOGGER.error(e.getMessage(), e);</b>
+<b class="fc"><i>31</i>&nbsp;        }</b>
+<b class="fc"><i>32</i>&nbsp;    }</b>
+<i>33</i>&nbsp;
+<i>34</i>&nbsp;    @Override
+<i>35</i>&nbsp;    public void parse(String fullFileName) {
+<i>36</i>&nbsp;        try {
+<b class="fc"><i>37</i>&nbsp;            parser.parse(fullFileName, cardsHandler);</b>
+<b class="nc"><i>38</i>&nbsp;        } catch (IOException | SAXException e) {</b>
+<b class="nc"><i>39</i>&nbsp;            LOGGER.error(e.getMessage(), e);</b>
+<b class="fc"><i>40</i>&nbsp;        }</b>
+<b class="fc"><i>41</i>&nbsp;        cards = cardsHandler.getCards();</b>
+<b class="fc"><i>42</i>&nbsp;        Collections.sort(cards);</b>
+<b class="fc"><i>43</i>&nbsp;    }</b>
+<i>44</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-12-03 15:36</div>
+</div>
+</body>
+</html>

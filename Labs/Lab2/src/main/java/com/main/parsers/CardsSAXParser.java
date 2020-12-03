@@ -1,5 +1,9 @@
 package com.main.parsers;
 
+import org.apache.log4j.LogManager;
+import org.apache.log4j.PropertyConfigurator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.xml.sax.SAXException;
 
 import javax.xml.parsers.ParserConfigurationException;
@@ -9,6 +13,11 @@ import java.io.IOException;
 import java.util.Collections;
 
 public class CardsSAXParser extends AbstractCardsParser {
+    static {
+        new PropertyConfigurator().doConfigure("log4j.properties", LogManager.getLoggerRepository());
+    }
+    private static final Logger LOGGER = LoggerFactory.getLogger(CardsSAXParser.class);
+
     private final CardsHandler cardsHandler;
     private SAXParser parser;
 
@@ -18,7 +27,7 @@ public class CardsSAXParser extends AbstractCardsParser {
         try {
             parser = factory.newSAXParser();
         } catch (ParserConfigurationException | SAXException e) {
-            e.printStackTrace();
+            LOGGER.error(e.getMessage(), e);
         }
     }
 
@@ -27,7 +36,7 @@ public class CardsSAXParser extends AbstractCardsParser {
         try {
             parser.parse(fullFileName, cardsHandler);
         } catch (IOException | SAXException e) {
-            e.printStackTrace();
+            LOGGER.error(e.getMessage(), e);
         }
         cards = cardsHandler.getCards();
         Collections.sort(cards);

@@ -1,6 +1,10 @@
 package com.main.parsers;
 
 import com.main.card.*;
+import org.apache.log4j.LogManager;
+import org.apache.log4j.PropertyConfigurator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
@@ -13,6 +17,11 @@ import java.io.IOException;
 import java.util.Collections;
 
 public class CardsDOMParser extends AbstractCardsParser {
+    static {
+        new PropertyConfigurator().doConfigure("log4j.properties", LogManager.getLoggerRepository());
+    }
+    private static final Logger LOGGER = LoggerFactory.getLogger(CardsDOMParser.class);
+
     private DocumentBuilder documentBuilder;
 
     public CardsDOMParser() {
@@ -20,7 +29,7 @@ public class CardsDOMParser extends AbstractCardsParser {
         try {
             documentBuilder = factory.newDocumentBuilder();
         } catch (ParserConfigurationException e) {
-            e.printStackTrace();
+            LOGGER.error(e.getMessage(), e);
         }
     }
 
@@ -37,7 +46,7 @@ public class CardsDOMParser extends AbstractCardsParser {
             }
             Collections.sort(cards);
         } catch (IOException | SAXException e) {
-            e.printStackTrace();
+            LOGGER.error(e.getMessage(), e);
         }
     }
 

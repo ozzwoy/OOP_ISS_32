@@ -1,6 +1,10 @@
 package com.main;
 
 import com.main.card.Card;
+import org.apache.log4j.LogManager;
+import org.apache.log4j.PropertyConfigurator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -15,6 +19,11 @@ import java.io.IOException;
 import java.util.List;
 
 public class CardsXMLBuilder {
+    static {
+        new PropertyConfigurator().doConfigure("log4j.properties", LogManager.getLoggerRepository());
+    }
+    private static final Logger LOGGER = LoggerFactory.getLogger(CardsXMLBuilder.class);
+
     List<Card> cards;
     String path;
 
@@ -70,7 +79,7 @@ public class CardsXMLBuilder {
                 rootElement.appendChild(cardElement);
             }
         } catch (ParserConfigurationException e) {
-            e.printStackTrace();
+            LOGGER.error(e.getMessage(), e);
         }
 
         TransformerFactory transformerFactory = TransformerFactory.newInstance();
@@ -81,7 +90,7 @@ public class CardsXMLBuilder {
             StreamResult result = new StreamResult(new FileWriter(path));
             transformer.transform(source, result);
         } catch (IOException | TransformerException e) {
-            e.printStackTrace();
+            LOGGER.error(e.getMessage(), e);
         }
     }
 }

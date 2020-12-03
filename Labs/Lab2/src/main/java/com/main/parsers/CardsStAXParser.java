@@ -1,6 +1,10 @@
 package com.main.parsers;
 
 import com.main.card.*;
+import org.apache.log4j.LogManager;
+import org.apache.log4j.PropertyConfigurator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamConstants;
@@ -13,6 +17,11 @@ import java.io.IOException;
 import java.util.Collections;
 
 public class CardsStAXParser extends AbstractCardsParser {
+    static {
+        new PropertyConfigurator().doConfigure("log4j.properties", LogManager.getLoggerRepository());
+    }
+    private static final Logger LOGGER = LoggerFactory.getLogger(CardsStAXParser.class);
+
     private static final String CARD = "card";
     private static final String ID = "id";
     private static final String AUTHOR = "author";
@@ -47,14 +56,14 @@ public class CardsStAXParser extends AbstractCardsParser {
                 }
             }
         } catch (FileNotFoundException | XMLStreamException e) {
-            e.printStackTrace();
+            LOGGER.error(e.getMessage(), e);
         } finally {
             try {
                 if (inputStream != null) {
                     inputStream.close();
                 }
             } catch (IOException e) {
-                e.printStackTrace();
+                LOGGER.error(e.getMessage(), e);
             }
         }
 
