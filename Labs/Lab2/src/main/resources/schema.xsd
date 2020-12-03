@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema xmlns="http://www.w3.org/2001/XMLSchema"
+        targetNamespace="http://www.example.com/cards"
+        xmlns:tns="http://www.example.com/cards">
+
+    <element name="OldCard">
+        <complexType>
+            <sequence>
+                <element name="card"
+                         type="tns:Card"
+                         maxOccurs="unbounded" />
+            </sequence>
+        </complexType>
+    </element>
+
+    <complexType name="Card">
+        <sequence>
+            <element name="theme" type="tns:Theme" />
+            <element name="type"
+                     type="tns:Type" />
+            <element name="country" type="string" />
+            <element name="year">
+                <simpleType>
+                    <restriction base="int">
+                        <maxInclusive value="2020" />
+                    </restriction>
+                </simpleType>
+            </element>
+            <element name="valuable" type="tns:Valuable" minOccurs="0" />
+        </sequence>
+
+        <attribute name="id" use="required">
+            <simpleType>
+                <restriction base="ID">
+                    <pattern value="[A-Z]{2}\d{5}" />
+                </restriction>
+            </simpleType>
+        </attribute>
+        <attribute name="author" type="string" />
+    </complexType>
+
+    <simpleType name="Theme">
+        <restriction base="string">
+            <enumeration value="city scenery" />
+            <enumeration value="nature" />
+            <enumeration value="people" />
+            <enumeration value="religion" />
+            <enumeration value="sport" />
+            <enumeration value="architecture" />
+            <enumeration value="other" />
+        </restriction>
+    </simpleType>
+
+    <complexType name="Type">
+        <sequence>
+            <element name="kind">
+                <simpleType>
+                    <restriction base="string">
+                        <enumeration value="invitation" />
+                        <enumeration value="advertisement" />
+                        <enumeration value="simple" />
+                    </restriction>
+                </simpleType>
+            </element>
+        </sequence>
+
+        <attribute name="sent" type="boolean" use="required" />
+    </complexType>
+
+    <simpleType name="Valuable">
+        <restriction base="string">
+            <enumeration value="historical" />
+            <enumeration value="collectible" />
+            <enumeration value="thematic" />
+        </restriction>
+    </simpleType>
+
+</schema>

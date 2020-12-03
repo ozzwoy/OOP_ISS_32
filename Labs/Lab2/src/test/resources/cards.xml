@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<cns:OldCard xmlns:cns="http://www.example.com/cards">
+    <card id="RG90790">
+        <theme>sport</theme>
+        <type sent="true">
+            <kind>invitation</kind>
+        </type>
+        <country>Berlin</country>
+        <year>1995</year>
+        <valuable>collectible</valuable>
+    </card>
+    <card id="KU67234">
+        <theme>city scenery</theme>
+        <type sent="true">
+            <kind>advertisement</kind>
+        </type>
+        <country>USA</country>
+        <year>1986</year>
+    </card>
+    <card author="O. Kobayashi" id="NP37953">
+        <theme>nature</theme>
+        <type sent="false">
+            <kind>simple</kind>
+        </type>
+        <country>Japan</country>
+        <year>2007</year>
+        <valuable>thematic</valuable>
+    </card>
+</cns:OldCard>
