@@ -1,6 +1,6 @@
 package com.example.linesgame.model;
 
-class Cell {
+public class Cell {
     private Color color;
     private boolean isEmpty;
 

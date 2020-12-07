@@ -271,10 +271,10 @@ public class LinesGameModel {
                 }
                 break;
             case ANTIDIAGONAL:
-                if (i - 1 >= 0 && j - 1 >= 0 && current.getColor() ==
-                                              field.get(i - 1, j - 1).getColor()) {
+                if (i + 1 < field.getSize() && j - 1 >= 0 && current.getColor() ==
+                                              field.get(i + 1, j - 1).getColor()) {
                     fullChain = destructionProcedure(cellsToDestroy, checked, chainsLengths,
-                            i - 1, j - 1, direction, count + 1);
+                            i + 1, j - 1, direction, count + 1);
                 } else {
                     //the end of chain
                     if (count >= MIN_CELLS_IN_CHAIN) {

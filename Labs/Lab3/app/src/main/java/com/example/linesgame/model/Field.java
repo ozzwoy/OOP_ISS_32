@@ -5,7 +5,7 @@ import com.example.linesgame.model.utils.Position;
 import java.util.ArrayList;
 import java.util.List;
 
-class Field {
+public class Field {
     private final List<List<Cell>> cells;
 
     public Field(int size) {
